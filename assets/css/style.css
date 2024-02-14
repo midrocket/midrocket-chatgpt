@@ -1,0 +1,112 @@
+#chatbot-container {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 1rem;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    height: 400px;
+    z-index: 1000;
+    gap: 0.5rem;
+}
+
+#chatbot-messages {
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
+    font-size: 0.875rem;
+    overflow: scroll;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-content: flex-start;
+}
+
+#chatbot-messages > div {
+	padding: 0.5rem;
+	background: #d6d8ff;
+	border-radius: 8px;
+	width: auto;
+	display: inline-flex;
+	margin-right: 1rem;
+}
+
+#chatbot-messages .user-message {
+	align-self: flex-end;
+	margin-left: 1rem;
+	margin-right: 0;
+	background: #ededed;
+}
+
+.chatbot-actions {
+	display: flex;
+	gap: 0.5rem;
+	position: relative;
+}
+
+#chatbot-input, #chatbot-send-btn {
+    padding: 0.5rem;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #f1f1f1;
+    font-size: 0.875rem;
+}
+
+#chatbot-input {
+	flex: 1;
+}
+
+#chatbot-send-btn {
+	background: #111;
+	color: #fff;
+	border: 0;
+	padding: 0.5rem 1rem;
+}
+
+#chatbot-loading {
+    display: none;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 0;
+    background: #eeeeee4a;
+    border-radius: 8px;
+}
+
+@keyframes spinner-animation {
+  0% { transform: translate(-50%,-50%) rotate(0deg); }
+  100% { transform: translate(-50%,-50%) rotate(360deg); }
+}
+.shape div {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 3px solid #0a0a0a;
+  border-top-color: transparent;
+  border-radius: 50%;
+}
+.shape div {
+  animation: spinner-animation 0.85s linear infinite;
+  top: 18px;
+  left: 18px;
+}
+.spinner {
+  width: 36px;
+  height: 36px;
+  display: inline-block;
+  overflow: hidden;
+}
+.shape {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translateZ(0) scale(1);
+  backface-visibility: hidden;
+  transform-origin: 0 0; /* see note above */
+}
+.shape div { box-sizing: content-box; }
