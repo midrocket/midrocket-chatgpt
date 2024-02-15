@@ -66,14 +66,14 @@ function midrocket_chatbot_gpt_settings_init()
     }
     add_settings_field(
         'midrocket_chatbot_gpt_specific_content',
-        'Specific Content<br><p>Paste all the raw content with the information ChatGPT should know (f.e. Full FAQ articles).</p>',
+        'Specific Content<p style="font-weight:normal">Paste all the raw content with the information ChatGPT should know (f.e. Full FAQ articles).</p>',
         'midrocket_chatbot_gpt_specific_content_render',
         'midrocket_chatbot_gpt_settings',
         'midrocket_chatbot_gpt_settings_section'
     );
     add_settings_field(
         'midrocket_chatbot_gpt_tematic_prompt',
-        'Tematic Prompt<br><p>Specify the tematic of the Chatbot, be as specific as you need to be.</p>',
+        'Tematic Prompt<p style="font-weight:normal">Specify the tematic of the Chatbot, be as specific as you need to be.</p>',
         'midrocket_chatbot_gpt_tematic_prompt_render',
         'midrocket_chatbot_gpt_settings',
         'midrocket_chatbot_gpt_settings_section'
@@ -83,7 +83,10 @@ add_action('admin_init', 'midrocket_chatbot_gpt_settings_init');
 
 function midrocket_chatbot_gpt_settings_section_callback()
 {
-    echo 'Enter your settings below:';
+    echo '<div class="chatgpt-legend grey-box">
+            <strong>Legend</strong>
+            <p>You can use [COMPANY_NAME] under any prompt field to be replaced for the Company Name entered in the field above.</p>
+        </div>';
 }
 
 function midrocket_chatbot_gpt_api_key_render()
@@ -108,8 +111,11 @@ function midrocket_chatbot_gpt_rules_prompt_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-    <textarea name='midrocket_chatbot_gpt_options[rules_prompt]' rows='5'
-    cols='50'><?php echo !empty($options['rules_prompt']) ? $options['rules_prompt'] : RULES_PROMPT; ?></textarea>
+    <div class="input-example">
+        <textarea name='midrocket_chatbot_gpt_options[rules_prompt]' rows='10'
+        cols='75'><?php echo !empty($options['rules_prompt']) ? $options['rules_prompt'] : RULES_PROMPT; ?></textarea>
+        <?php example_collapsible(RULES_PROMPT); ?>
+    </div>
     <?php
 }
 
@@ -117,8 +123,11 @@ function midrocket_chatbot_gpt_specific_content_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-    <textarea name='midrocket_chatbot_gpt_options[specific_content]' rows='5'
-    cols='50' placeholder="Paste here all the content the chatbot should know to give answers"><?php echo $options['specific_content']; ?></textarea>
+    <div class="input-example">
+        <textarea name='midrocket_chatbot_gpt_options[specific_content]' rows='10'
+        cols='75' placeholder="Paste here all the content the chatbot should know to give answers"><?php echo $options['specific_content']; ?></textarea>
+        <?php example_collapsible(SPECIFIC_CONTENT_EXAMPLE); ?>
+    </div>
     <?php
 }
 
@@ -126,8 +135,11 @@ function midrocket_chatbot_gpt_tematic_prompt_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-<textarea name='midrocket_chatbot_gpt_options[tematic_prompt]' rows='5'
-    cols='50'><?php echo !empty($options['tematic_prompt']) ? $options['tematic_prompt'] : '(Ejemplo actual) '.TEMATIC_PROMPT; ?></textarea>
+    <div class="input-example">
+      <textarea name='midrocket_chatbot_gpt_options[tematic_prompt]' rows='10'
+      cols='75'><?php echo !empty($options['tematic_prompt']) ? $options['tematic_prompt'] : '(Ejemplo actual) '.TEMATIC_PROMPT; ?></textarea>
+      <?php example_collapsible(TEMATIC_PROMPT); ?>
+    </div>
 <?php
 }
 
@@ -138,9 +150,21 @@ function midrocket_chatbot_gpt_options_validate($input)
     $new_input['specific_content'] = sanitize_textarea_field($input['specific_content']);
     $new_input['tematic_prompt'] = sanitize_textarea_field($input['tematic_prompt']);
     
-    if(isset($_GET['super'])) {
+    if(isset($input['rules_prompt'])) {
         $new_input['rules_prompt'] = sanitize_textarea_field($input['rules_prompt']);
     }
     return $new_input;
+}
+
+function example_collapsible($content, $example_title = null){
+    ?>
+    <div class="example">
+        <div class="collapsible-title collapsible"><strong><?php echo $example_title ?? 'Show example'; ?></strong><i class="fi fi-rr-plus"></i><i class="fi fi-rr-minus"></i></div>
+        <div class="collapsible-content">
+            <strong>Example:</strong>
+            <p><?php echo nl2br( $content ); ?></p>
+        </div>
+    </div>
+    <?php
 }
 ?>
