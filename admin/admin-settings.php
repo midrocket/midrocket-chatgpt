@@ -55,6 +55,14 @@ function midrocket_chatbot_gpt_settings_init()
     );
 
     add_settings_field(
+        'midrocket_chatbot_gpt_intro_message',
+        'Intro message',
+        'midrocket_chatbot_gpt_intro_message_render',
+        'midrocket_chatbot_gpt_settings',
+        'midrocket_chatbot_gpt_settings_main_section'
+    );
+
+    add_settings_field(
         'midrocket_chatbot_gpt_company_name',
         'Company Name',
         'midrocket_chatbot_gpt_company_name_render',
@@ -112,14 +120,25 @@ function midrocket_chatbot_gpt_api_key_render()
 <?php
 }
 
+function midrocket_chatbot_gpt_intro_message_render()
+{
+    $options = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <input type='text' class='long-input' name='midrocket_chatbot_gpt_options[intro_message]'
+    value='<?php echo $options['intro_message']; ?>'
+    placeholder="Hi, I'm JetSet Private Jets Chatbot! Do you have any questions?">
+<?php
+}
+
 function midrocket_chatbot_gpt_company_name_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-    <input type='text' name='midrocket_chatbot_gpt_options[company_name]'
+    <input type='text' class='long-input' name='midrocket_chatbot_gpt_options[company_name]'
     value='<?php echo $options['company_name']; ?>'>
 <?php
 }
+
 
 function midrocket_chatbot_gpt_rules_prompt_render()
 {
@@ -160,6 +179,7 @@ function midrocket_chatbot_gpt_tematic_prompt_render()
 function midrocket_chatbot_gpt_options_validate($input)
 {
     $new_input['api_key'] = sanitize_text_field($input['api_key']);
+    $new_input['intro_message'] = sanitize_text_field($input['intro_message']);
     $new_input['company_name'] = sanitize_text_field($input['company_name']);
     $new_input['specific_content'] = sanitize_textarea_field($input['specific_content']);
     $new_input['tematic_prompt'] = sanitize_textarea_field($input['tematic_prompt']);

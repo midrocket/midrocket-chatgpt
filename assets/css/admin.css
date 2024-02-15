@@ -1,5 +1,9 @@
 @import url('https://cdn-uicons.flaticon.com/2.1.0/uicons-regular-rounded/css/uicons-regular-rounded.css');
 
+.long-input {
+    width: 500px;
+}
+
 .chatgpt-legend {
     margin: 10px 0;
 }

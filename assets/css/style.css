@@ -1,3 +1,5 @@
+@import url('https://cdn-uicons.flaticon.com/2.1.0/uicons-regular-rounded/css/uicons-regular-rounded.css');
+
 #chatbot-container {
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   background-color: #fff;
@@ -25,6 +27,28 @@
   flex-direction: column-reverse;
   gap: 0.25rem;
   align-content: flex-start;
+  position: relative;
+}
+
+#chatbot-messages #chatbot-intro {
+	font-size: 1rem;
+	background: transparent;
+	text-align: center;
+	position: absolute;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	left: 50%;
+	width: 100%;
+	margin: 0;
+	padding: 1rem;
+	box-sizing: border-box;
+  display: flex;
+	flex-direction: column;
+}
+
+#chatbot-messages #chatbot-intro i {
+	font-size: 24px;
+	color: #444;
 }
 
 #chatbot-messages > div {

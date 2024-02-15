@@ -5,10 +5,11 @@ jQuery(document).ready(function($) {
     $('#chatbot-send-btn').click(function() {
         var message = $('#chatbot-input').val();
         conversationHistory.push({role: "user", content: message});
-
+        
         $('#chatbot-messages').prepend('<div class="user-message">' + message + '</div>');
         $('#chatbot-messages').prepend('<div class="typing-message"><div class="typing"><span></span><span></span><span></span></div></div>');
         $('#chatbot-input').val(' ').prop('disabled', true); // Hide placeholder
+        $('#chatbot-intro').hide();
         $('#chatbot-send-btn').prop('disabled', true);
         //$('#chatbot-loading').show();
         $('#chatbot-loading').css('display', 'flex');
