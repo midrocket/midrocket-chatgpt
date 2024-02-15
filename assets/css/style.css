@@ -1,103 +1,98 @@
 #chatbot-container {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    border-radius: 1rem;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 300px;
-    height: 400px;
-    z-index: 1000;
-    gap: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 1rem;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  height: 400px;
+  z-index: 1000;
+  gap: 0.5rem;
 }
 
 #chatbot-messages {
-    width: 100%;
-    box-sizing: border-box;
-    height: 100%;
-    font-size: 0.875rem;
-    overflow: scroll;
-    border-radius: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    align-content: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  height: 100%;
+  font-size: 0.875rem;
+  overflow: scroll;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.25rem;
+  align-content: flex-start;
 }
 
 #chatbot-messages > div {
-	padding: 0.5rem;
-	background: #d6d8ff;
-	border-radius: 8px;
-	width: auto;
-	display: inline-flex;
-	margin-right: 1rem;
+padding: 0.5rem;
+background: #d6d8ff;
+border-radius: 8px;
+width: auto;
+margin-right: 1rem;
+align-self: self-start;
 }
 
 #chatbot-messages .user-message {
-	align-self: flex-end;
-	margin-left: 1rem;
-	margin-right: 0;
-	background: #ededed;
+align-self: flex-end;
+margin-left: 1rem;
+margin-right: 0;
+background: #ededed;
 }
 
 .chatbot-actions {
-	display: flex;
-	gap: 0.5rem;
-	position: relative;
+display: flex;
+gap: 0.5rem;
+position: relative;
 }
 
 #chatbot-input, #chatbot-send-btn {
-    padding: 0.5rem;
-    font-size: 16px;
-    border-radius: 8px;
-    border: 1px solid #f1f1f1;
-    font-size: 0.875rem;
+  padding: 0.5rem;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #f1f1f1;
+  font-size: 0.875rem;
 }
 
 #chatbot-input {
-	flex: 1;
+flex: 1;
 }
 
 #chatbot-send-btn {
-	background: #111;
-	color: #fff;
-	border: 0;
-	padding: 0.5rem 1rem;
+background: #111;
+color: #fff;
+border: 0;
+padding: 0.5rem 1rem;
+}
+
+#chatbot-send-btn:disabled,
+#chatbot-send-btn[disabled] {
+background: #999;
 }
 
 #chatbot-loading {
-    display: none;
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    top: 0;
-    background: #eeeeee4a;
-    border-radius: 8px;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  border-radius: 8px;
+  display: none;
+align-items: center;
+height: 100%;
+margin-left: 0.25rem;
 }
 
 @keyframes spinner-animation {
-  0% { transform: translate(-50%,-50%) rotate(0deg); }
-  100% { transform: translate(-50%,-50%) rotate(360deg); }
+0% { transform: translate(-50%,-50%) rotate(0deg); }
+100% { transform: translate(-50%,-50%) rotate(360deg); }
 }
-.shape div {
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  border: 3px solid #0a0a0a;
-  border-top-color: transparent;
-  border-radius: 50%;
-}
-.shape div {
-  animation: spinner-animation 0.85s linear infinite;
-  top: 18px;
-  left: 18px;
-}
+
 .spinner {
-  width: 36px;
-  height: 36px;
+  --spinner-size: 24px;
+  width: var(--spinner-size);
+  height: var(--spinner-size);
   display: inline-block;
   overflow: hidden;
 }
@@ -110,3 +105,59 @@
   transform-origin: 0 0; /* see note above */
 }
 .shape div { box-sizing: content-box; }
+
+.shape div {
+  position: absolute;
+  width: calc(var(--spinner-size)/2);
+  height: calc(var(--spinner-size)/2);
+  border: 3px solid #0a0a0a;
+  border-top-color: transparent;
+  border-radius: 50%;
+}
+.shape div {
+  animation: spinner-animation 0.85s linear infinite;
+  top: calc(var(--spinner-size)/2);
+  left: calc(var(--spinner-size)/2);
+}
+
+.typing {
+  position: relative;
+  --dot-width: 10px;
+  --dot-color: #3b5998;
+  --dot-speed: 1.5s;
+  display: flex;
+  gap: calc(var(--dot-width) * 0.5);
+} 
+.typing span {
+  content: '';
+  animation: blink var(--dot-speed) infinite;
+  animation-fill-mode: both;
+  height: var(--dot-width);
+  width: var(--dot-width);
+  background: var(--dot-color);
+  position: relative;
+  left:0;
+  top:0;
+  border-radius: 50%;
+}
+.typing span:nth-child(2) {
+  animation-delay: .2s;
+  margin-left: var(--dot-width) * 1.5;
+}
+  
+.typing span:nth-child(3) {
+  animation-delay: .4s;
+  margin-left: var(--dot-width) * 3;
+}
+
+@keyframes blink {
+0% {
+  opacity: .1;
+}
+20% {
+  opacity: 1;
+}
+100% {
+  opacity: .1;
+}
+}

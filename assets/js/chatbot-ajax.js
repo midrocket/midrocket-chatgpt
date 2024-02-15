@@ -6,10 +6,12 @@ jQuery(document).ready(function($) {
         var message = $('#chatbot-input').val();
         conversationHistory.push({role: "user", content: message});
 
-        $('#chatbot-messages').append('<div class="user-message">' + message + '</div>');
-        $('#chatbot-input').val('');
+        $('#chatbot-messages').prepend('<div class="user-message">' + message + '</div>');
+        $('#chatbot-messages').prepend('<div class="typing-message"><div class="typing"><span></span><span></span><span></span></div></div>');
+        $('#chatbot-input').val(' ').prop('disabled', true); // Hide placeholder
         $('#chatbot-send-btn').prop('disabled', true);
-        $('#chatbot-loading').show();
+        //$('#chatbot-loading').show();
+        $('#chatbot-loading').css('display', 'flex');
 
         $.ajax({
             type: "POST",
@@ -20,12 +22,14 @@ jQuery(document).ready(function($) {
                 isFirstMessage: isFirstMessage
             },
             success: function(response) {
-                $('#chatbot-messages').append('<div class="chatbot-response">' + response + '</div>');
+                $('.typing-message').remove();
+                $('#chatbot-messages').prepend('<div class="chatbot-response">' + response + '</div>');
                 conversationHistory.push({role: "assistant", content: response});
                 isFirstMessage = false;
             },
             complete: function() {
                 $('#chatbot-send-btn').prop('disabled', false);
+                $('#chatbot-input').val('').prop('disabled', false).focus();
                 $('#chatbot-loading').hide();
             }
         });
