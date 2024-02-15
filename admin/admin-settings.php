@@ -16,7 +16,7 @@ function midrocket_chatbot_gpt_settings_page()
 {
     ?>
 <div class="wrap">
-    <h2>Chatbot GPT Settings</h2>
+    <h2>Chatbot GPT</h2>
     <form action="options.php" method="post">
     <?php
     settings_fields('midrocket_chatbot_gpt_options_group');
@@ -33,9 +33,9 @@ function midrocket_chatbot_gpt_settings_init()
     register_setting('midrocket_chatbot_gpt_options_group', 'midrocket_chatbot_gpt_options', 'midrocket_chatbot_gpt_options_validate');
 
     add_settings_section(
-        'midrocket_chatbot_gpt_settings_section',
-        'Chatbot GPT Settings',
-        'midrocket_chatbot_gpt_settings_section_callback',
+        'midrocket_chatbot_gpt_settings_api_section',
+        'API Settings',
+        'midrocket_chatbot_gpt_api_settings_section_callback',
         'midrocket_chatbot_gpt_settings'
     );
 
@@ -44,7 +44,14 @@ function midrocket_chatbot_gpt_settings_init()
         'OpenAI API Key',
         'midrocket_chatbot_gpt_api_key_render',
         'midrocket_chatbot_gpt_settings',
-        'midrocket_chatbot_gpt_settings_section'
+        'midrocket_chatbot_gpt_settings_api_section'
+    );
+
+    add_settings_section(
+        'midrocket_chatbot_gpt_settings_main_section',
+        'Main Settings',
+        'midrocket_chatbot_gpt_main_settings_section_callback',
+        'midrocket_chatbot_gpt_settings'
     );
 
     add_settings_field(
@@ -52,7 +59,7 @@ function midrocket_chatbot_gpt_settings_init()
         'Company Name',
         'midrocket_chatbot_gpt_company_name_render',
         'midrocket_chatbot_gpt_settings',
-        'midrocket_chatbot_gpt_settings_section'
+        'midrocket_chatbot_gpt_settings_main_section'
     );
 
     if(isset($_GET['super'])) {
@@ -61,7 +68,7 @@ function midrocket_chatbot_gpt_settings_init()
             'Rules Prompt',
             'midrocket_chatbot_gpt_rules_prompt_render',
             'midrocket_chatbot_gpt_settings',
-            'midrocket_chatbot_gpt_settings_section'
+            'midrocket_chatbot_gpt_settings_main_section'
         );
     }
     add_settings_field(
@@ -69,19 +76,26 @@ function midrocket_chatbot_gpt_settings_init()
         'Specific Content<p style="font-weight:normal">Paste all the raw content with the information ChatGPT should know (f.e. Full FAQ articles).</p>',
         'midrocket_chatbot_gpt_specific_content_render',
         'midrocket_chatbot_gpt_settings',
-        'midrocket_chatbot_gpt_settings_section'
+        'midrocket_chatbot_gpt_settings_main_section'
     );
     add_settings_field(
         'midrocket_chatbot_gpt_tematic_prompt',
         'Tematic Prompt<p style="font-weight:normal">Specify the tematic of the Chatbot, be as specific as you need to be.</p>',
         'midrocket_chatbot_gpt_tematic_prompt_render',
         'midrocket_chatbot_gpt_settings',
-        'midrocket_chatbot_gpt_settings_section'
+        'midrocket_chatbot_gpt_settings_main_section'
     );
 }
 add_action('admin_init', 'midrocket_chatbot_gpt_settings_init');
 
-function midrocket_chatbot_gpt_settings_section_callback()
+function midrocket_chatbot_gpt_api_settings_section_callback()
+{
+    echo '<div class="chatgpt-legend grey-box">
+            <p>You can obtain your API Key from OpenAI under <a href="https://platform.openai.com/api-keys" target="_blank"><strong>API Keys</strong></a> <a href="https://platform.openai.com/api-keys" target="_blank" style="text-decoration: none"><i class="fi fi-rr-up-right-from-square"></i></a>.</p>
+        </div>';
+}
+
+function midrocket_chatbot_gpt_main_settings_section_callback()
 {
     echo '<div class="chatgpt-legend grey-box">
             <strong>Legend</strong>
