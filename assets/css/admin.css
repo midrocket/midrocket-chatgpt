@@ -73,3 +73,30 @@
   border-top: 0;
   margin-top: -4px;
 }
+
+.knowledge-pair {margin-bottom: 10px;display: flex;flex-direction: column;gap: 0.5rem;padding: 1rem;border: 1px solid #ccc;border-radius: 4px;}
+.knowledge-pair .knowledge-summary { display: flex; align-items: center; }
+.knowledge-pair .knowledge-summary .knowledge-question-title { flex-grow: 1; }
+.knowledge-pair input, .knowledge-pair textarea { margin-right: 5px; }
+.knowledge-pair .knowledge-edit-form {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+.knowledge-pair .knowledge-edit-form > * {
+	align-self: self-start;
+	min-width: 500px;
+}
+
+.knowledge-pair .remove-knowledge-pair {
+	min-width: auto;
+}
+
+.knowledge-pair textarea {
+	width: 100%;
+}
+
+.button-remove {
+  color: #d63638!important;
+  border-color: #d63638!important;
+}

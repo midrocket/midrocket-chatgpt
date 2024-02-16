@@ -7,9 +7,12 @@ function ask_openai($conversation_history, $isFirstMessage) {
     $api_key            = $options['api_key'];
     $company_name       = $options['company_name'];
     $rules_prompt       = !empty($options['rules_prompt']) ? $options['rules_prompt'] : RULES_PROMPT;
+
+    // Will be deprecated
     $tematic_prompt     = !empty($options['tematic_prompt']) ? $options['tematic_prompt'] : TEMATIC_PROMPT;
     $specific_content   = !empty($options['specific_content']) ? str_replace('%start_specific_content%%end_specific_content%', '%start_specific_content%'.$options['specific_content'].'%end_specific_content%', SPECIFIC_CONTENT) : SPECIFIC_CONTENT;
-    
+    // End Will be deprecated
+
     $api_key = $api_key ? $api_key : '';
     $ch = curl_init('https://api.openai.com/v1/chat/completions');
 
@@ -25,6 +28,8 @@ function ask_openai($conversation_history, $isFirstMessage) {
             'role' => 'system',
             'content' => $tematic_prompt.$specific_content.$rules_prompt
         ]);
+
+        // New version will add as much questions (user) & answers (assitant) as specified under section knowledge
         
     }
 
