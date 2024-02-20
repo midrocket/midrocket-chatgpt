@@ -27,6 +27,8 @@ function ask_openai($conversation_history, $isFirstMessage) {
             }
         }
 
+        // AMAZON: include more rules directly from amazon plugin
+        // add_filter('chatgpt_filter_rules_prompt', $rules_prompt)
         array_unshift($conversation_history, [
             'role' => 'system',
             'content' => $rules_prompt
@@ -73,6 +75,9 @@ function handle_chatbot_conversation() {
 
     // Suponiendo que $response contiene la respuesta formateada de OpenAI
     if ( isset( $response['choices'][0]['message']['content'] ) ) {
+
+        // AMAZON: IF nos devuelve un formato de respuesta establecido en reglas que es tipo "keyword" esta incluido aqui hacemos otro ask_openai
+        // add_filter('chatgpt_filter_response_before')
         echo esc_html( $response['choices'][0]['message']['content'] );
     } else {
         print_r($response);
