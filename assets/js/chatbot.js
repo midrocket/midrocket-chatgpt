@@ -2,6 +2,24 @@ let conversationHistory = [];
 let isFirstMessage = true;
 
 jQuery(document).ready(function($) {
+
+    $('#chatbot-input').on('input', function() {
+        if ($(this).val().trim().length > 0) {
+            $('#chatbot-send-btn').prop('disabled', false);
+        } else {
+            $('#chatbot-send-btn').prop('disabled', true);
+        }
+    });
+
+    $('#chatbot-input').keypress(function(e) {
+        if(e.which == 13) { // Enter key pressed
+            if (!$('#chatbot-send-btn').prop('disabled')) {
+                $('#chatbot-send-btn').click();
+            }
+            e.preventDefault();
+        }
+    });
+
     $('#chatbot-send-btn').click(function() {
         var message = $('#chatbot-input').val();
         conversationHistory.push({role: "user", content: message});
@@ -35,14 +53,5 @@ jQuery(document).ready(function($) {
             }
         });
     });
-});
 
-
-jQuery(document).ready(function($) {
-    $('#chatbot-input').keypress(function(e) {
-        if(e.which == 13) { // Enter key pressed
-            $('#chatbot-send-btn').click(); // Trigger send button click event
-            e.preventDefault(); // Prevent the default action to stop form submission
-        }
-    });
 });

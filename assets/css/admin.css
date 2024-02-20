@@ -8,6 +8,17 @@
     margin: 10px 0;
 }
 
+.cgpt-flex {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.csoon {
+	margin: 0!important;
+	color: grey;
+}
+
 .grey-box {
     padding: 1rem;
     background: #eee;
@@ -22,6 +33,11 @@
 
 .example {
 	flex: 1;
+}
+
+.input-example .example ul {
+	list-style: inside;
+	padding: 5px;
 }
 
 .collapsible {

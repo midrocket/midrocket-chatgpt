@@ -18,41 +18,51 @@ function midrocket_chatbot_gpt_settings_page()
 <div class="wrap">
     <h2>Chatbot GPT</h2>
     <h2 class="nav-tab-wrapper">
-        <a href="#api-settings" class="nav-tab nav-tab-active" id="api-settings-tab">API Settings</a>
-        <a href="#main-settings" class="nav-tab" id="main-settings-tab">Main Settings</a>
-        <a href="#knowledge-settings" class="nav-tab" id="main-settings-tab">Knowledge</a>
+        <a href="#main-settings" class="nav-tab nav-tab-active" id="main-settings-tab">Main Settings</a>
+        <a href="#style-settings" class="nav-tab" id="style-settings-tab">Style</a>
+        <a href="#knowledge-settings" class="nav-tab" id="knowledge-settings-tab">Knowledge</a>
+        <a href="#api-settings" class="nav-tab" id="api-settings-tab">API Settings</a>
     </h2>
-    <div id="api-settings" class="tab-content">
+    <div id="main-settings" class="tab-content">
         <form action="options.php" method="post">
             <?php
             settings_fields('midrocket_chatbot_gpt_options_group');
-            do_settings_sections('midrocket_chatbot_gpt_settings_api');
-            submit_button();
-            ?>
+    do_settings_sections('midrocket_chatbot_gpt_settings_main');
+    submit_button();
+    ?>
         </form>
     </div>
-    <div id="main-settings" class="tab-content" style="display: none;">
+    <div id="style-settings" class="tab-content" style="display: none;">
         <form action="options.php" method="post">
             <?php
-            settings_fields('midrocket_chatbot_gpt_options_group');
-            do_settings_sections('midrocket_chatbot_gpt_settings_main');
-            submit_button();
-            ?>
+    settings_fields('midrocket_chatbot_gpt_options_group');
+    do_settings_sections('midrocket_chatbot_gpt_settings_style');
+    submit_button();
+    ?>
         </form>
     </div>
     <div id="knowledge-settings" class="tab-content" style="display: none;">
         <form action="options.php" method="post">
             <?php
-            settings_fields('midrocket_chatbot_gpt_options_group');
-            do_settings_sections('midrocket_chatbot_gpt_settings_knowledge');
-            submit_button();
-            ?>
+    settings_fields('midrocket_chatbot_gpt_options_group');
+    do_settings_sections('midrocket_chatbot_gpt_settings_knowledge');
+    submit_button();
+    ?>
+        </form>
+    </div>
+    <div id="api-settings" class="tab-content" style="display: none;">
+        <form action="options.php" method="post">
+            <?php
+    settings_fields('midrocket_chatbot_gpt_options_group');
+    do_settings_sections('midrocket_chatbot_gpt_settings_api');
+    submit_button();
+    ?>
         </form>
     </div>
 </div>
 <script type="text/javascript">
     jQuery(document).ready(function($) {
-        $('a.nav-tab').click(function(e) {
+        $('a.nav-tab, a.open-tab').click(function(e) {
             e.preventDefault();
             $('.nav-tab').removeClass('nav-tab-active');
             $(this).addClass('nav-tab-active');
@@ -69,21 +79,6 @@ function midrocket_chatbot_gpt_settings_init()
     register_setting('midrocket_chatbot_gpt_options_group', 'midrocket_chatbot_gpt_options', 'midrocket_chatbot_gpt_options_validate');
 
     add_settings_section(
-        'midrocket_chatbot_gpt_settings_api_section',
-        'API Settings',
-        'midrocket_chatbot_gpt_api_settings_section_callback',
-        'midrocket_chatbot_gpt_settings_api'
-    );
-
-    add_settings_field(
-        'midrocket_chatbot_gpt_api_key',
-        'OpenAI API Key',
-        'midrocket_chatbot_gpt_api_key_render',
-        'midrocket_chatbot_gpt_settings_api',
-        'midrocket_chatbot_gpt_settings_api_section'
-    );
-
-    add_settings_section(
         'midrocket_chatbot_gpt_settings_main_section',
         'Main Settings',
         'midrocket_chatbot_gpt_main_settings_section_callback',
@@ -91,44 +86,12 @@ function midrocket_chatbot_gpt_settings_init()
     );
 
     add_settings_field(
-        'midrocket_chatbot_gpt_intro_message',
-        'Intro message',
-        'midrocket_chatbot_gpt_intro_message_render',
+        'midrocket_chatbot_gpt_rules_prompt',
+        'System Prompt',
+        'midrocket_chatbot_gpt_rules_prompt_render',
         'midrocket_chatbot_gpt_settings_main',
         'midrocket_chatbot_gpt_settings_main_section'
     );
-
-    add_settings_field(
-        'midrocket_chatbot_gpt_company_name',
-        'Company Name',
-        'midrocket_chatbot_gpt_company_name_render',
-        'midrocket_chatbot_gpt_settings_main',
-        'midrocket_chatbot_gpt_settings_main_section'
-    );
-
-    if(isset($_GET['super'])) {
-        add_settings_field(
-            'midrocket_chatbot_gpt_rules_prompt',
-            'System Prompt',
-            'midrocket_chatbot_gpt_rules_prompt_render',
-            'midrocket_chatbot_gpt_settings_main',
-            'midrocket_chatbot_gpt_settings_main_section'
-        );
-    }
-    // add_settings_field(
-    //     'midrocket_chatbot_gpt_specific_content',
-    //     'Specific Content<p style="font-weight:normal">Paste all the raw content with the information ChatGPT should know (f.e. Full FAQ articles).</p>',
-    //     'midrocket_chatbot_gpt_specific_content_render',
-    //     'midrocket_chatbot_gpt_settings_main',
-    //     'midrocket_chatbot_gpt_settings_main_section'
-    // );
-    // add_settings_field(
-    //     'midrocket_chatbot_gpt_tematic_prompt',
-    //     'Tematic Prompt<p style="font-weight:normal">Specify the tematic of the Chatbot, be as specific as you need to be.</p>',
-    //     'midrocket_chatbot_gpt_tematic_prompt_render',
-    //     'midrocket_chatbot_gpt_settings_main',
-    //     'midrocket_chatbot_gpt_settings_main_section'
-    // );
 
     add_settings_section(
         'midrocket_chatbot_gpt_settings_knowledge_a_section',
@@ -152,8 +115,51 @@ function midrocket_chatbot_gpt_settings_init()
         'midrocket_chatbot_gpt_settings_knowledge'
     );
 
+    add_settings_section(
+        'midrocket_chatbot_gpt_settings_style_section',
+        'Style',
+        'midrocket_chatbot_gpt_style_settings_section_callback',
+        'midrocket_chatbot_gpt_settings_style'
+    );
+
+    add_settings_field(
+        'midrocket_chatbot_gpt_intro_message',
+        'Intro message',
+        'midrocket_chatbot_gpt_intro_message_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_style_section'
+    );
+
+    add_settings_section(
+        'midrocket_chatbot_gpt_settings_api_section',
+        'API Settings',
+        'midrocket_chatbot_gpt_api_settings_section_callback',
+        'midrocket_chatbot_gpt_settings_api'
+    );
+
+    add_settings_field(
+        'midrocket_chatbot_gpt_api_key',
+        'OpenAI API Key',
+        'midrocket_chatbot_gpt_api_key_render',
+        'midrocket_chatbot_gpt_settings_api',
+        'midrocket_chatbot_gpt_settings_api_section'
+    );
+
+    add_settings_field(
+        'midrocket_chatbot_gpt_model',
+        'GPT Version',
+        'midrocket_chatbot_gpt_model_render',
+        'midrocket_chatbot_gpt_settings_api',
+        'midrocket_chatbot_gpt_settings_api_section'
+    );
+
 }
 add_action('admin_init', 'midrocket_chatbot_gpt_settings_init');
+
+function midrocket_chatbot_gpt_style_settings_section_callback()
+{
+    echo '';
+}
 
 function midrocket_chatbot_gpt_api_settings_section_callback()
 {
@@ -164,10 +170,19 @@ function midrocket_chatbot_gpt_api_settings_section_callback()
 
 function midrocket_chatbot_gpt_main_settings_section_callback()
 {
-    echo '<div class="chatgpt-legend grey-box">
-            <strong>Legend</strong>
-            <p>You can use [COMPANY_NAME] under any prompt field to be replaced for the Company Name entered in the field above.</p>
-        </div>';
+    $options = get_option('midrocket_chatbot_gpt_options');
+    $api_key = isset($options['api_key']) ? $options['api_key'] : null;
+    if(!$api_key) {
+        echo '<div class="chatgpt-legend grey-box">
+                <strong>Set-up</strong>
+                <p>Please set-up your OpenAI <a href="#api-settings" class="open-tab"><strong>API Key</strong></a> .</p>
+            </div>';
+    }
+
+    // echo '<div class="chatgpt-legend grey-box">
+    //         <strong>Legend</strong>
+    //         <p>You can use [COMPANY_NAME] under any prompt field to be replaced for the Company Name entered in the field above.</p>
+    //     </div>';
 }
 
 // Knowledge
@@ -180,7 +195,10 @@ function midrocket_chatbot_gpt_knowledge_automatic_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-    <button type="button" class="button button-secondary">Start generating automatic Q&A</button>
+<div class="cgpt-flex"><button type="button" class="button button-secondary button-disabled">Start generating automatic
+        Q&amp;A</button>
+    <p class="csoon">Coming soon</p>
+</div>
 <?php
 }
 
@@ -191,44 +209,66 @@ function midrocket_chatbot_gpt_knowledge_settings_m_section_callback()
 
     echo '<p>In this section you can add all the Knowledge to your model so the Chatbot already knows the answer to specified questions. Automatic generated knowledge will be shown here.</p>';
     ?>
-    <div id="knowledge-repeater">
-        <?php foreach ($knowledge as $index => $qa): ?>
-            <div class="knowledge-pair" data-index="<?php echo $index; ?>">
-                <div class="knowledge-summary">
-                    <span class="knowledge-question-title"><?php echo esc_html($qa['question']); ?></span>
-                    <div class="knowledge-actions">
-                        <button type="button" class="button button-secondary button-remove remove-knowledge-pair">Remove</button>    
-                        <button type="button" class="button button-secondary edit-knowledge-pair">Edit</button>
-                    </div>
-                </div>
-                <div class="knowledge-edit-form" style="display: none;">
-                    <input type="text" name="midrocket_chatbot_gpt_options[knowledge][<?php echo $index; ?>][question]" value="<?php echo esc_attr($qa['question']); ?>" placeholder="Question" />
-                    <textarea name="midrocket_chatbot_gpt_options[knowledge][<?php echo $index; ?>][answer]" placeholder="Answer" rows="4"><?php echo esc_textarea($qa['answer']); ?></textarea>
-                </div>
+<div id="knowledge-repeater">
+    <?php foreach ($knowledge as $index => $qa): ?>
+    <div class="knowledge-pair" data-index="<?php echo $index; ?>">
+        <div class="knowledge-summary">
+            <span
+                class="knowledge-question-title"><?php echo esc_html($qa['question']); ?></span>
+            <div class="knowledge-actions">
+                <button type="button"
+                    class="button button-secondary button-remove remove-knowledge-pair">Remove</button>
+                <button type="button" class="button button-secondary edit-knowledge-pair">Edit</button>
             </div>
-        <?php endforeach; ?>
-        <button type="button" id="add-knowledge-pair" class="button button-secondary">Add New Question</button>
+        </div>
+        <div class="knowledge-edit-form" style="display: none;">
+            <input type="text"
+                name="midrocket_chatbot_gpt_options[knowledge][<?php echo $index; ?>][question]"
+                value="<?php echo esc_attr($qa['question']); ?>"
+                placeholder="What is the price of a t-shirt?" />
+            <textarea
+                name="midrocket_chatbot_gpt_options[knowledge][<?php echo $index; ?>][answer]"
+                placeholder="Prices range from $9 to $18. White t-shirts cost $9, green ones $12, and blue ones $18."
+                rows="4"><?php echo esc_textarea($qa['answer']); ?></textarea>
+        </div>
     </div>
-    <?php
-    
+    <?php endforeach; ?>
+    <button type="button" id="add-knowledge-pair" class="button button-secondary">Add New Question</button>
+</div>
+<?php
+
 }
 
 function midrocket_chatbot_gpt_api_key_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-    <input type='text' name='midrocket_chatbot_gpt_options[api_key]'
+<input type='text' name='midrocket_chatbot_gpt_options[api_key]'
     value='<?php echo $options['api_key']; ?>'>
 <?php
 }
+
+function midrocket_chatbot_gpt_model_render()
+{
+    $options = get_option('midrocket_chatbot_gpt_options');
+    ?>
+<select name='midrocket_chatbot_gpt_options[gpt_model]'>
+    <option value='gpt-3.5-turbo' <?php selected(isset($options['gpt_model']) ? $options['gpt_model'] : '', 'gpt3.5-turbo'); ?>>GPT-3.5
+        Turbo</option>
+    <option value='gpt-4' <?php selected(isset($options['gpt_model']) ? $options['gpt_model'] : '', 'gpt4'); ?>>GPT-4
+    </option>
+</select>
+<?php
+}
+
 
 function midrocket_chatbot_gpt_intro_message_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-    <input type='text' class='long-input' name='midrocket_chatbot_gpt_options[intro_message]'
+<input type='text' class='long-input' name='midrocket_chatbot_gpt_options[intro_message]'
     value='<?php echo $options['intro_message']; ?>'
-    placeholder="Hi, I'm JetSet Private Jets Chatbot! Do you have any questions?">
+    placeholder="Hi, I'm GreenTrend Chatbot! Do you have any questions?">
 <?php
 }
 
@@ -236,7 +276,7 @@ function midrocket_chatbot_gpt_company_name_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-    <input type='text' class='long-input' name='midrocket_chatbot_gpt_options[company_name]'
+<input type='text' class='long-input' name='midrocket_chatbot_gpt_options[company_name]'
     value='<?php echo $options['company_name']; ?>'>
 <?php
 }
@@ -246,35 +286,35 @@ function midrocket_chatbot_gpt_rules_prompt_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-    <div class="input-example">
-        <textarea name='midrocket_chatbot_gpt_options[rules_prompt]' rows='10'
-        cols='75'><?php echo !empty($options['rules_prompt']) ? $options['rules_prompt'] : RULES_PROMPT; ?></textarea>
-        <?php example_collapsible(RULES_PROMPT); ?>
-    </div>
-    <?php
+<div class="input-example">
+    <textarea name='midrocket_chatbot_gpt_options[rules_prompt]' rows='10'
+        cols='75'><?php echo $options['rules_prompt']; ?></textarea>
+    <?php example_collapsible(RULES_PROMPT); ?>
+</div>
+<?php
 }
 
 function midrocket_chatbot_gpt_specific_content_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-    <div class="input-example">
-        <textarea name='midrocket_chatbot_gpt_options[specific_content]' rows='10'
-        cols='75' placeholder="Paste here all the content the chatbot should know to give answers"><?php echo $options['specific_content']; ?></textarea>
-        <?php example_collapsible(SPECIFIC_CONTENT_EXAMPLE); ?>
-    </div>
-    <?php
+<div class="input-example">
+    <textarea name='midrocket_chatbot_gpt_options[specific_content]' rows='10' cols='75'
+        placeholder="Paste here all the content the chatbot should know to give answers"><?php echo $options['specific_content']; ?></textarea>
+    <?php example_collapsible(SPECIFIC_CONTENT_EXAMPLE); ?>
+</div>
+<?php
 }
 
 function midrocket_chatbot_gpt_tematic_prompt_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-    <div class="input-example">
-      <textarea name='midrocket_chatbot_gpt_options[tematic_prompt]' rows='10'
-      cols='75'><?php echo !empty($options['tematic_prompt']) ? $options['tematic_prompt'] : '(Ejemplo actual) '.TEMATIC_PROMPT; ?></textarea>
-      <?php example_collapsible(TEMATIC_PROMPT); ?>
-    </div>
+<div class="input-example">
+    <textarea name='midrocket_chatbot_gpt_options[tematic_prompt]' rows='10'
+        cols='75'><?php echo !empty($options['tematic_prompt']) ? $options['tematic_prompt'] : '(Ejemplo actual) '.TEMATIC_PROMPT; ?></textarea>
+    <?php example_collapsible(TEMATIC_PROMPT); ?>
+</div>
 <?php
 }
 
@@ -285,23 +325,17 @@ function midrocket_chatbot_gpt_options_validate($input)
     if(isset($input['api_key'])) {
         $current_options['api_key'] = sanitize_text_field($input['api_key']);
     }
+    if(in_array($input['gpt_model'], ['gpt-3.5-turbo', 'gpt-4'])) {
+        $current_options['gpt_model'] = $input['gpt_model'];
+    }
     if(isset($input['intro_message'])) {
         $current_options['intro_message'] = sanitize_text_field($input['intro_message']);
-    }
-    if(isset($input['company_name'])) {
-        $current_options['company_name'] = sanitize_text_field($input['company_name']);
-    }
-    if(isset($input['specific_content'])) {
-        $current_options['specific_content'] = sanitize_textarea_field($input['specific_content']);
-    }
-    if(isset($input['tematic_prompt'])) {
-        $current_options['tematic_prompt'] = sanitize_textarea_field($input['tematic_prompt']);
     }
     if(isset($input['rules_prompt'])) {
         $current_options['rules_prompt'] = sanitize_textarea_field($input['rules_prompt']);
     }
-    $current_options['knowledge'] = [];
     if (isset($input['knowledge']) && is_array($input['knowledge'])) {
+        $current_options['knowledge'] = [];
         foreach ($input['knowledge'] as $index => $qa) {
             if (!empty($qa['question']) && !empty($qa['answer'])) {
                 $current_options['knowledge'][] = [
@@ -316,15 +350,17 @@ function midrocket_chatbot_gpt_options_validate($input)
 }
 
 
-function example_collapsible($content, $example_title = null){
+function example_collapsible($content, $example_title = null)
+{
     ?>
-    <div class="example">
-        <div class="collapsible-title collapsible"><strong><?php echo $example_title ?? 'Show example'; ?></strong><i class="fi fi-rr-plus"></i><i class="fi fi-rr-minus"></i></div>
-        <div class="collapsible-content">
-            <strong>Example:</strong>
-            <p><?php echo nl2br( $content ); ?></p>
-        </div>
+<div class="example">
+    <div class="collapsible-title collapsible">
+        <strong><?php echo $example_title ?? 'Show example'; ?></strong><i
+            class="fi fi-rr-plus"></i><i class="fi fi-rr-minus"></i></div>
+    <div class="collapsible-content">
+        <p><?php echo $content; ?></p>
     </div>
-    <?php
+</div>
+<?php
 }
 ?>

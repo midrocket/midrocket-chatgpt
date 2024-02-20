@@ -4,37 +4,38 @@ function ask_openai($conversation_history, $isFirstMessage) {
 
     $options            = get_option('midrocket_chatbot_gpt_options');
 
-    $api_key            = $options['api_key'];
-    $company_name       = $options['company_name'];
+    $api_key            = $options['api_key'] ?? '';
     $rules_prompt       = !empty($options['rules_prompt']) ? $options['rules_prompt'] : RULES_PROMPT;
+    $gpt_model          = !empty($options['gpt_model']) ? $options['gpt_model'] : 'gpt-3.5-turbo';
 
-    // Will be deprecated
-    $tematic_prompt     = !empty($options['tematic_prompt']) ? $options['tematic_prompt'] : TEMATIC_PROMPT;
-    $specific_content   = !empty($options['specific_content']) ? str_replace('%start_specific_content%%end_specific_content%', '%start_specific_content%'.$options['specific_content'].'%end_specific_content%', SPECIFIC_CONTENT) : SPECIFIC_CONTENT;
-    // End Will be deprecated
-
-    $api_key = $api_key ? $api_key : '';
     $ch = curl_init('https://api.openai.com/v1/chat/completions');
 
-    if ($isFirstMessage && !empty($tematic_prompt)) {
+    if ($isFirstMessage && !empty($rules_prompt)) {
 
-        if(!empty($company_name)){
-            $tematic_prompt = str_replace("[COMPANY_NAME]", $company_name, $tematic_prompt);
-            $specific_content = str_replace("[COMPANY_NAME]", $company_name, $specific_content);
-            $rules_prompt = str_replace("[COMPANY_NAME]", $company_name, $rules_prompt);
+        if (!empty($options['knowledge']) && is_array($options['knowledge'])) {
+            foreach ($options['knowledge'] as $knowledge_pair) {
+                if (!empty($knowledge_pair['question']) && !empty($knowledge_pair['answer'])) {
+                    array_unshift($conversation_history, [
+                        'role' => 'user',
+                        'content' => $knowledge_pair['question']
+                    ]);
+                    array_unshift($conversation_history, [
+                        'role' => 'assistant',
+                        'content' => $knowledge_pair['answer']
+                    ]);
+                }
+            }
         }
 
         array_unshift($conversation_history, [
             'role' => 'system',
-            'content' => $tematic_prompt.$specific_content.$rules_prompt
+            'content' => $rules_prompt
         ]);
 
-        // New version will add as much questions (user) & answers (assitant) as specified under section knowledge
-        
     }
 
     $data = [
-        'model' => 'gpt-3.5-turbo',
+        'model' => $gpt_model,
         'messages' => $conversation_history,
     ];
 
@@ -74,6 +75,7 @@ function handle_chatbot_conversation() {
     if ( isset( $response['choices'][0]['message']['content'] ) ) {
         echo esc_html( $response['choices'][0]['message']['content'] );
     } else {
+        print_r($response);
         echo 'Lo siento, no pude procesar tu solicitud.';
     }
 
