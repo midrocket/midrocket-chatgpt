@@ -2,7 +2,7 @@ var coll = document.getElementsByClassName("collapsible");
 var i;
 
 for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
+  coll[i].addEventListener("click", function () {
     this.classList.toggle("active");
     var content = this.nextElementSibling;
     if (content.style.display === "block") {
@@ -35,21 +35,24 @@ for (i = 0; i < coll.length; i++) {
 //   });
 // });
 
-jQuery(document).ready(function($) {
-  $('#knowledge-repeater').on('click', '.edit-knowledge-pair', function() {
-      $(this).closest('.knowledge-pair').find('.knowledge-edit-form').toggle();
+jQuery(document).ready(function ($) {
+  $('#knowledge-repeater').on('click', '.edit-knowledge-pair, .knowledge-question-title', function () {
+    $(this).closest('.knowledge-pair').find('.knowledge-edit-form').toggle();
   });
 
-  $('#add-knowledge-pair').click(function() {
-      var new_index = $('#knowledge-repeater .knowledge-pair').length;
-      $('#knowledge-repeater').append(`
+  $('#add-knowledge-pair').click(function () {
+    var new_index = $('#knowledge-repeater .knowledge-pair').length;
+    $(this).before(`
           <div class="knowledge-pair" data-index="${new_index}">
               <div class="knowledge-summary">
                   <span class="knowledge-question-title">New Question</span>
-                  <button type="button" class="button button-secondary edit-knowledge-pair">Edit</button>
+                  <div class="knowledge-actions">
+                    <button type="button" class="button button-secondary button-remove remove-knowledge-pair">Remove</button>
+                    <button type="button" class="button button-secondary edit-knowledge-pair">Edit</button>
+                  </div>
               </div>
               <div class="knowledge-edit-form" style="display: none;">
-                  <input type="text" name="midrocket_chatbot_gpt_options[knowledge][${new_index}][question]" value="" placeholder="Question" />
+                  <input type="text" class="question-input" name="midrocket_chatbot_gpt_options[knowledge][${new_index}][question]" value="" placeholder="Question" />
                   <textarea name="midrocket_chatbot_gpt_options[knowledge][${new_index}][answer]" placeholder="Answer" rows="4"></textarea>
                   <button type="button" class="button button-secondary remove-knowledge-pair">Remove</button>
               </div>
@@ -57,7 +60,13 @@ jQuery(document).ready(function($) {
       `);
   });
 
-  $('#knowledge-repeater').on('click', '.remove-knowledge-pair', function() {
-      $(this).closest('.knowledge-pair').remove();
+  $('#knowledge-repeater').on('click', '.remove-knowledge-pair', function () {
+    $(this).closest('.knowledge-pair').remove();
   });
+
+  $('#knowledge-repeater').on('input', '.question-input', function () {
+    var updatedQuestion = $(this).val();
+    $(this).closest('.knowledge-pair').find('.knowledge-question-title').text(updatedQuestion);
+  });
+
 });

@@ -76,7 +76,7 @@
 
 .knowledge-pair {margin-bottom: 10px;display: flex;flex-direction: column;gap: 0.5rem;padding: 1rem;border: 1px solid #ccc;border-radius: 4px;}
 .knowledge-pair .knowledge-summary { display: flex; align-items: center; }
-.knowledge-pair .knowledge-summary .knowledge-question-title { flex-grow: 1; }
+.knowledge-pair .knowledge-summary .knowledge-question-title { flex-grow: 1; font-weight: bold; cursor: pointer; }
 .knowledge-pair input, .knowledge-pair textarea { margin-right: 5px; }
 .knowledge-pair .knowledge-edit-form {
 	display: flex;

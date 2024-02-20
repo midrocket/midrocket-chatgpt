@@ -195,7 +195,7 @@ function midrocket_chatbot_gpt_knowledge_settings_m_section_callback()
         <?php foreach ($knowledge as $index => $qa): ?>
             <div class="knowledge-pair" data-index="<?php echo $index; ?>">
                 <div class="knowledge-summary">
-                    <span class="knowledge-question-title"><strong><?php echo esc_html($qa['question']); ?></strong></span>
+                    <span class="knowledge-question-title"><?php echo esc_html($qa['question']); ?></span>
                     <div class="knowledge-actions">
                         <button type="button" class="button button-secondary button-remove remove-knowledge-pair">Remove</button>    
                         <button type="button" class="button button-secondary edit-knowledge-pair">Edit</button>
