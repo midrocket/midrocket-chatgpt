@@ -65,7 +65,8 @@ function midrocket_chatbot_gpt_settings_page()
         $('a.nav-tab, a.open-tab').click(function(e) {
             e.preventDefault();
             $('.nav-tab').removeClass('nav-tab-active');
-            $(this).addClass('nav-tab-active');
+            $tab = $(this).data('target-tab') ?? $(this);
+            $($tab).addClass('nav-tab-active');
             $('.tab-content').hide();
             $('#' + $(this).attr('href').substring(1)).show();
         });
@@ -163,7 +164,14 @@ function midrocket_chatbot_gpt_style_settings_section_callback()
 
 function midrocket_chatbot_gpt_api_settings_section_callback()
 {
-    echo '<div class="chatgpt-legend grey-box">
+    $options = get_option('midrocket_chatbot_gpt_options');
+    $api_key = isset($options['api_key']) ? $options['api_key'] : null;
+    if(!$api_key) {
+        echo '<div class="notice notice-info">
+            <p>You can obtain your API Key from OpenAI under <a href="https://platform.openai.com/api-keys" target="_blank"><strong>API Keys</strong></a> <a href="https://platform.openai.com/api-keys" target="_blank" style="text-decoration: none"><i class="fi fi-rr-up-right-from-square"></i></a>.</p>
+        </div>';
+    }
+    echo '<div>
             <p>You can obtain your API Key from OpenAI under <a href="https://platform.openai.com/api-keys" target="_blank"><strong>API Keys</strong></a> <a href="https://platform.openai.com/api-keys" target="_blank" style="text-decoration: none"><i class="fi fi-rr-up-right-from-square"></i></a>.</p>
         </div>';
 }
@@ -173,16 +181,10 @@ function midrocket_chatbot_gpt_main_settings_section_callback()
     $options = get_option('midrocket_chatbot_gpt_options');
     $api_key = isset($options['api_key']) ? $options['api_key'] : null;
     if(!$api_key) {
-        echo '<div class="chatgpt-legend grey-box">
-                <strong>Set-up</strong>
-                <p>Please set-up your OpenAI <a href="#api-settings" class="open-tab"><strong>API Key</strong></a> .</p>
-            </div>';
+        echo '<div class="notice notice-warning">
+                <p>Please set-up your OpenAI <a href="#api-settings" class="open-tab" data-target-tab="#api-settings-tab"><strong>API Key</strong></a>.</p>
+              </div>';
     }
-
-    // echo '<div class="chatgpt-legend grey-box">
-    //         <strong>Legend</strong>
-    //         <p>You can use [COMPANY_NAME] under any prompt field to be replaced for the Company Name entered in the field above.</p>
-    //     </div>';
 }
 
 // Knowledge
@@ -239,7 +241,7 @@ function midrocket_chatbot_gpt_knowledge_settings_m_section_callback()
 
 }
 
-function midrocket_chatbot_gpt_api_key_render()
+function midrocket_chatbot_gpt_api_key_render_old()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
@@ -248,14 +250,33 @@ function midrocket_chatbot_gpt_api_key_render()
 <?php
 }
 
+function midrocket_chatbot_gpt_api_key_render() {
+    $options        = get_option('midrocket_chatbot_gpt_options');
+    $api_key_status = !empty($options['api_key_status']) ? $options['api_key_status'] : '';
+
+    ?>
+    <div class="cgpt-flex">
+        <input type='text' id='midrocket_chatbot_gpt_api_key' name='midrocket_chatbot_gpt_options[api_key]' value='<?php echo esc_attr($options['api_key']); ?>'>
+        <button type="button" id="midrocket_chatbot_gpt_connect_btn" class="button button-secondary">
+            <?php echo __('Test connection', 'midrocket-chatgpt'); ?>
+            <span class="spinner is-active"></span>
+        </button>
+        <span id="midrocket_chatbot_gpt_api_key_status">
+    </div>
+    </span>
+    
+    <?php
+}
+
+
 function midrocket_chatbot_gpt_model_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
 <select name='midrocket_chatbot_gpt_options[gpt_model]'>
-    <option value='gpt-3.5-turbo' <?php selected(isset($options['gpt_model']) ? $options['gpt_model'] : '', 'gpt3.5-turbo'); ?>>GPT-3.5
+    <option value='gpt-3.5-turbo' <?php selected(isset($options['gpt_model']) ? $options['gpt_model'] : '', 'gpt-3.5-turbo'); ?>>GPT-3.5
         Turbo</option>
-    <option value='gpt-4' <?php selected(isset($options['gpt_model']) ? $options['gpt_model'] : '', 'gpt4'); ?>>GPT-4
+    <option value='gpt-4' <?php selected(isset($options['gpt_model']) ? $options['gpt_model'] : '', 'gpt-4'); ?>>GPT-4
     </option>
 </select>
 <?php

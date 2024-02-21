@@ -1,10 +1,11 @@
 <?php
 
-function ask_openai($conversation_history, $isFirstMessage) {
+function ask_openai($conversation_history, $isFirstMessage, $api_key_override = null) {
 
     $options            = get_option('midrocket_chatbot_gpt_options');
 
-    $api_key            = $options['api_key'] ?? '';
+    //$api_key            = $options['api_key'] ?? '';
+    $api_key            = $api_key_override ?? $options['api_key'] ?? '';
     $rules_prompt       = !empty($options['rules_prompt']) ? $options['rules_prompt'] : RULES_PROMPT;
     $gpt_model          = !empty($options['gpt_model']) ? $options['gpt_model'] : 'gpt-3.5-turbo';
 
@@ -16,12 +17,12 @@ function ask_openai($conversation_history, $isFirstMessage) {
             foreach ($options['knowledge'] as $knowledge_pair) {
                 if (!empty($knowledge_pair['question']) && !empty($knowledge_pair['answer'])) {
                     array_unshift($conversation_history, [
-                        'role' => 'user',
-                        'content' => $knowledge_pair['question']
-                    ]);
-                    array_unshift($conversation_history, [
                         'role' => 'assistant',
                         'content' => $knowledge_pair['answer']
+                    ]);
+                    array_unshift($conversation_history, [
+                        'role' => 'user',
+                        'content' => $knowledge_pair['question']
                     ]);
                 }
             }
@@ -88,3 +89,27 @@ function handle_chatbot_conversation() {
 }
 add_action( 'wp_ajax_handle_chatbot_conversation', 'handle_chatbot_conversation' );
 add_action( 'wp_ajax_nopriv_handle_chatbot_conversation', 'handle_chatbot_conversation' );
+
+function verify_openai_api_key() {
+    if (!current_user_can('manage_options') || !isset($_POST['api_key'])) {
+        wp_send_json_error(['message' => 'Unauthorized']);
+        return;
+    }
+
+    $api_key = sanitize_text_field($_POST['api_key']);
+
+    // Preparar un mensaje de prueba
+    $conversation_history = [
+        ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+        ['role' => 'user', 'content' => 'Hello, who are you?'],
+    ];
+
+    $response   = ask_openai($conversation_history, true, $api_key);
+
+    if (!isset($response['error']) && isset($response['choices'])) {
+        wp_send_json_success(['message' => 'API Key is valid.', 'options' => $options]);
+    } else {
+        wp_send_json_error(['message' => 'API Key is invalid.']);
+    }
+}
+add_action('wp_ajax_verify_openai_api_key', 'verify_openai_api_key');

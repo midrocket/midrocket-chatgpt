@@ -69,4 +69,29 @@ jQuery(document).ready(function ($) {
     $(this).closest('.knowledge-pair').find('.knowledge-question-title').text(updatedQuestion);
   });
 
+  $('#midrocket_chatbot_gpt_connect_btn').click(function () {
+    var $btn = $(this);
+    var apiKey = $('#midrocket_chatbot_gpt_api_key').val();
+    $btn.find('.spinner').css('display', 'inline-block');
+
+    $.ajax({
+      url: ajaxurl,
+      type: 'POST',
+      data: {
+        action: 'verify_openai_api_key',
+        api_key: apiKey,
+      },
+      success: function (response) {
+        if (response.success) {
+          $('#midrocket_chatbot_gpt_api_key_status').text(response.data.message).removeClass('api-key-invalid').addClass('api-key-valid');
+        } else {
+          $('#midrocket_chatbot_gpt_api_key_status').text(response.data.message).removeClass('api-key-valid').addClass('api-key-invalid');
+        }
+      },
+      complete: function () {
+        $btn.find('.spinner').css('display', 'none');
+      }
+    });
+  });
+
 });
