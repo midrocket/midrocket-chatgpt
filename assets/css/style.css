@@ -47,7 +47,8 @@
 	padding: 0.5rem;
 	background-color: var(--container-bg);
 	border-radius: 0.75rem;
-	color: #fff;
+	color: var(--container-color);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   cursor: pointer;
   transition: .5s all;
 }
