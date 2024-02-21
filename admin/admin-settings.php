@@ -102,11 +102,17 @@ function midrocket_chatbot_gpt_settings_init()
         'midrocket_chatbot_gpt_knowledge_settings_a_section_callback',
         'midrocket_chatbot_gpt_settings_knowledge'
     );
-
     add_settings_field(
         'midrocket_chatbot_gpt_knowledge_automatic',
         'Generate Knowledge',
         'midrocket_chatbot_gpt_knowledge_automatic_render',
+        'midrocket_chatbot_gpt_settings_knowledge',
+        'midrocket_chatbot_gpt_settings_knowledge_a_section'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_separator_knowledge_a',
+        '',
+        'midrocket_chatbot_gpt_separator_render',
         'midrocket_chatbot_gpt_settings_knowledge',
         'midrocket_chatbot_gpt_settings_knowledge_a_section'
     );
@@ -128,15 +134,22 @@ function midrocket_chatbot_gpt_settings_init()
     );
     add_settings_field(
         'midrocket_chatbot_gpt_bot_title',
-        'Bot title',
+        'Bot Title',
         'midrocket_chatbot_gpt_bot_title_render',
         'midrocket_chatbot_gpt_settings_style',
         'midrocket_chatbot_gpt_settings_labels_section'
     );
     add_settings_field(
         'midrocket_chatbot_gpt_intro_message',
-        'Intro message',
+        'Intro Message',
         'midrocket_chatbot_gpt_intro_message_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_labels_section'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_separator_labels',
+        '',
+        'midrocket_chatbot_gpt_separator_render',
         'midrocket_chatbot_gpt_settings_style',
         'midrocket_chatbot_gpt_settings_labels_section'
     );
@@ -150,21 +163,21 @@ function midrocket_chatbot_gpt_settings_init()
     );
     add_settings_field(
         'midrocket_chatbot_gpt_opened_by_default',
-        'Opened by default',
+        'Opened by Default',
         'midrocket_chatbot_gpt_opened_by_default_render',
         'midrocket_chatbot_gpt_settings_style',
         'midrocket_chatbot_gpt_settings_visibility_section'
     );
     add_settings_field(
         'midrocket_chatbot_gpt_default_mode',
-        'Default mode',
+        'Default Mode',
         'midrocket_chatbot_gpt_default_mode_render',
         'midrocket_chatbot_gpt_settings_style',
         'midrocket_chatbot_gpt_settings_visibility_section'
     );
     add_settings_field(
         'midrocket_chatbot_gpt_dark_mode_toggle',
-        'Dark mode toggle',
+        'Show Dark Mode Toggle',
         'midrocket_chatbot_gpt_dark_mode_toggle_render',
         'midrocket_chatbot_gpt_settings_style',
         'midrocket_chatbot_gpt_settings_visibility_section'
@@ -173,6 +186,13 @@ function midrocket_chatbot_gpt_settings_init()
         'midrocket_chatbot_gpt_position',
         'Position',
         'midrocket_chatbot_gpt_position_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_visibility_section'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_separator_visibility',
+        '',
+        'midrocket_chatbot_gpt_separator_render',
         'midrocket_chatbot_gpt_settings_style',
         'midrocket_chatbot_gpt_settings_visibility_section'
     );
@@ -247,6 +267,10 @@ function midrocket_chatbot_gpt_settings_init()
 
 }
 add_action('admin_init', 'midrocket_chatbot_gpt_settings_init');
+
+function midrocket_chatbot_gpt_separator_render() {
+    echo '<hr>';
+}
 
 function midrocket_chatbot_gpt_style_settings_section_callback()
 {
@@ -382,7 +406,7 @@ function midrocket_chatbot_gpt_position_render() {
 
 // Style / Customization
 function midrocket_chatbot_gpt_customization_section_callback() {
-    echo '<p>Customize the appearance of the chatbot. This customizations do not apply in <strong>dark mode.</strong></p>';
+    echo '<p>Customize the appearance of the chatbot. This customizations do not apply in <strong>Dark Mode.</strong></p>';
 }
 function midrocket_chatbot_gpt_icon_render_old() {
     $options = get_option('midrocket_chatbot_gpt_options');
