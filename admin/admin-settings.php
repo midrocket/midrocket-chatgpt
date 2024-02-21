@@ -27,36 +27,36 @@ function midrocket_chatbot_gpt_settings_page()
         <form action="options.php" method="post">
             <?php
             settings_fields('midrocket_chatbot_gpt_options_group');
-    do_settings_sections('midrocket_chatbot_gpt_settings_main');
-    submit_button();
+            do_settings_sections('midrocket_chatbot_gpt_settings_main');
+            submit_button();
     ?>
         </form>
     </div>
     <div id="style-settings" class="tab-content" style="display: none;">
         <form action="options.php" method="post">
             <?php
-    settings_fields('midrocket_chatbot_gpt_options_group');
-    do_settings_sections('midrocket_chatbot_gpt_settings_style');
-    submit_button();
-    ?>
+            settings_fields('midrocket_chatbot_gpt_options_group');
+            do_settings_sections('midrocket_chatbot_gpt_settings_style');
+            submit_button();
+            ?>
         </form>
     </div>
     <div id="knowledge-settings" class="tab-content" style="display: none;">
         <form action="options.php" method="post">
             <?php
-    settings_fields('midrocket_chatbot_gpt_options_group');
-    do_settings_sections('midrocket_chatbot_gpt_settings_knowledge');
-    submit_button();
-    ?>
+            settings_fields('midrocket_chatbot_gpt_options_group');
+            do_settings_sections('midrocket_chatbot_gpt_settings_knowledge');
+            submit_button();
+            ?>
         </form>
     </div>
     <div id="api-settings" class="tab-content" style="display: none;">
         <form action="options.php" method="post">
             <?php
-    settings_fields('midrocket_chatbot_gpt_options_group');
-    do_settings_sections('midrocket_chatbot_gpt_settings_api');
-    submit_button();
-    ?>
+            settings_fields('midrocket_chatbot_gpt_options_group');
+            do_settings_sections('midrocket_chatbot_gpt_settings_api');
+            submit_button();
+            ?>
         </form>
     </div>
 </div>
@@ -79,6 +79,7 @@ function midrocket_chatbot_gpt_settings_init()
 {
     register_setting('midrocket_chatbot_gpt_options_group', 'midrocket_chatbot_gpt_options', 'midrocket_chatbot_gpt_options_validate');
 
+    // Main Settings
     add_settings_section(
         'midrocket_chatbot_gpt_settings_main_section',
         'Main Settings',
@@ -94,6 +95,7 @@ function midrocket_chatbot_gpt_settings_init()
         'midrocket_chatbot_gpt_settings_main_section'
     );
 
+    // Knowledge / Automatic Knowledge
     add_settings_section(
         'midrocket_chatbot_gpt_settings_knowledge_a_section',
         'Automatic Knowledge',
@@ -109,6 +111,7 @@ function midrocket_chatbot_gpt_settings_init()
         'midrocket_chatbot_gpt_settings_knowledge_a_section'
     );
 
+    // Knowledge / Manage Knowledge
     add_settings_section(
         'midrocket_chatbot_gpt_settings_knowledge_m_section',
         'Manage Knowledge',
@@ -116,21 +119,109 @@ function midrocket_chatbot_gpt_settings_init()
         'midrocket_chatbot_gpt_settings_knowledge'
     );
 
+    // Style / Labels
     add_settings_section(
-        'midrocket_chatbot_gpt_settings_style_section',
-        'Style',
-        'midrocket_chatbot_gpt_style_settings_section_callback',
+        'midrocket_chatbot_gpt_settings_labels_section',
+        'Labels',
+        'midrocket_chatbot_gpt_labels_section_callback',
         'midrocket_chatbot_gpt_settings_style'
     );
-
+    add_settings_field(
+        'midrocket_chatbot_gpt_bot_title',
+        'Bot title',
+        'midrocket_chatbot_gpt_bot_title_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_labels_section'
+    );
     add_settings_field(
         'midrocket_chatbot_gpt_intro_message',
         'Intro message',
         'midrocket_chatbot_gpt_intro_message_render',
         'midrocket_chatbot_gpt_settings_style',
-        'midrocket_chatbot_gpt_settings_style_section'
+        'midrocket_chatbot_gpt_settings_labels_section'
     );
 
+    // Style / Visibility
+    add_settings_section(
+        'midrocket_chatbot_gpt_settings_visibility_section',
+        'Visibility',
+        'midrocket_chatbot_gpt_visibility_section_callback',
+        'midrocket_chatbot_gpt_settings_style'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_opened_by_default',
+        'Opened by default',
+        'midrocket_chatbot_gpt_opened_by_default_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_visibility_section'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_default_mode',
+        'Default mode',
+        'midrocket_chatbot_gpt_default_mode_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_visibility_section'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_dark_mode_toggle',
+        'Dark mode toggle',
+        'midrocket_chatbot_gpt_dark_mode_toggle_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_visibility_section'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_position',
+        'Position',
+        'midrocket_chatbot_gpt_position_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_visibility_section'
+    );
+    
+
+    // Style / Customization
+    add_settings_section(
+        'midrocket_chatbot_gpt_settings_customization_section',
+        'Customization',
+        'midrocket_chatbot_gpt_customization_section_callback',
+        'midrocket_chatbot_gpt_settings_style'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_icon',
+        'Custom Bot Icon',
+        'midrocket_chatbot_gpt_icon_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_customization_section'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_button_color',
+        'Button Text Color',
+        'midrocket_chatbot_gpt_button_color_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_customization_section'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_button_background_color',
+        'Button Background Color',
+        'midrocket_chatbot_gpt_button_background_color_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_customization_section'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_header_color',
+        'Header Text Color',
+        'midrocket_chatbot_gpt_header_color_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_customization_section'
+    );   
+    add_settings_field(
+        'midrocket_chatbot_gpt_header_background_color',
+        'Header Background Color',
+        'midrocket_chatbot_gpt_header_background_color_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_customization_section'
+    );    
+
+    // API
     add_settings_section(
         'midrocket_chatbot_gpt_settings_api_section',
         'API Settings',
@@ -241,14 +332,163 @@ function midrocket_chatbot_gpt_knowledge_settings_m_section_callback()
 
 }
 
-function midrocket_chatbot_gpt_api_key_render_old()
-{
+// Style / Labels
+function midrocket_chatbot_gpt_labels_section_callback() {
+    echo '<p>Customize the labels used by the chatbot.</p>';
+}
+function midrocket_chatbot_gpt_bot_title_render() {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-<input type='text' name='midrocket_chatbot_gpt_options[api_key]'
-    value='<?php echo $options['api_key']; ?>'>
-<?php
+    <input type="text" name="midrocket_chatbot_gpt_options[bot_title]" value="<?php echo esc_attr($options['bot_title'] ?? ''); ?>" placeholder="GreenTrends' Bot">
+    <?php
 }
+
+// Style / Visibility
+function midrocket_chatbot_gpt_visibility_section_callback() {
+    echo '<p>Adjust visibility settings for the chatbot.</p>';
+}
+function midrocket_chatbot_gpt_opened_by_default_render() {
+    $options = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <input type="hidden" name="midrocket_chatbot_gpt_options[opened_by_default]" value="0">
+    <input type="checkbox" name="midrocket_chatbot_gpt_options[opened_by_default]" <?php checked(isset($options['opened_by_default']) ? $options['opened_by_default'] : 0); ?> value="1">
+    <?php
+}
+function midrocket_chatbot_gpt_default_mode_render() {
+    $options = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <select name="midrocket_chatbot_gpt_options[default_mode]">
+        <option value="light" <?php selected(isset($options['default_mode']) ? $options['default_mode'] : '', 'light'); ?>>Light</option>
+        <option value="dark" <?php selected(isset($options['default_mode']) ? $options['default_mode'] : '', 'dark'); ?>>Dark</option>
+    </select>
+    <?php
+}
+function midrocket_chatbot_gpt_dark_mode_toggle_render() {
+    $options = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <input type="hidden" name="midrocket_chatbot_gpt_options[dark_mode_toggle]" value="0">
+    <input type="checkbox" name="midrocket_chatbot_gpt_options[dark_mode_toggle]" <?php checked(isset($options['dark_mode_toggle']) ? $options['dark_mode_toggle'] : 0); ?> value="1">
+    <?php
+}
+function midrocket_chatbot_gpt_position_render() {
+    $options = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <select name="midrocket_chatbot_gpt_options[position]">
+        <option value="bottom_right" <?php selected(isset($options['position']) ? $options['position'] : '', 'bottom_right'); ?>>Bottom right</option>
+        <option value="bottom_left" <?php selected(isset($options['position']) ? $options['position'] : '', 'bottom_left'); ?>>Bottom left</option>
+    </select>
+    <?php
+}
+
+// Style / Customization
+function midrocket_chatbot_gpt_customization_section_callback() {
+    echo '<p>Customize the appearance of the chatbot. This customizations do not apply in <strong>dark mode.</strong></p>';
+}
+function midrocket_chatbot_gpt_icon_render_old() {
+    $options = get_option('midrocket_chatbot_gpt_options');
+    // Utiliza wp_enqueue_media() para permitir subir archivos
+    ?>
+    <input type='text' id='midrocket_chatbot_gpt_icon' name='midrocket_chatbot_gpt_options[icon]' value='<?php echo esc_attr($options['icon'] ?? ''); ?>'>
+    <button type="button" class="button" onclick="uploadIcon()">Upload Icon</button>
+    <script>
+    function uploadIcon() {
+        var mediaUploader;
+        if (mediaUploader) {
+            mediaUploader.open();
+            return;
+        }
+        mediaUploader = wp.media.frames.file_frame = wp.media({
+            title: 'Choose Icon',
+            button: {
+                text: 'Choose Icon'
+            },
+            multiple: false
+        });
+        mediaUploader.on('select', function() {
+            var attachment = mediaUploader.state().get('selection').first().toJSON();
+            jQuery('#midrocket_chatbot_gpt_icon').val(attachment.url);
+        });
+        mediaUploader.open();
+    }
+    </script>
+    <?php
+}
+function midrocket_chatbot_gpt_icon_render() {
+    $options = get_option('midrocket_chatbot_gpt_options');
+    $icon_url = !empty($options['icon']) ? esc_url($options['icon']) : '';
+    ?>
+    <div class="midrocket-chatbot-icon-preview">
+        <?php if (!empty($icon_url)): ?>
+            <div class="box-preview">
+                <img src="<?php echo $icon_url; ?>" alt="Icon Preview" style="max-width: 100px; max-height: 100px;">
+            </div>
+        <?php endif; ?>
+    </div>
+    <input type="hidden" id="midrocket_chatbot_gpt_icon" name="midrocket_chatbot_gpt_options[icon]" value="<?php echo esc_attr($icon_url); ?>">
+    <button type="button" class="button midrocket-chatbot-upload-icon"><?php _e('Upload/Choose Icon', 'midrocket-chatgpt'); ?></button>
+    <button type="button" class="button midrocket-chatbot-remove-icon button-remove" style="<?php echo empty($icon_url) ? 'display:none;' : ''; ?>"><?php _e('Remove Icon', 'midrocket-chatgpt'); ?></button>
+    <script>
+    jQuery(document).ready(function($) {
+        $('.midrocket-chatbot-upload-icon').click(function(e) {
+            e.preventDefault();
+            var customUploader = wp.media({
+                title: 'Select Icon',
+                button: {
+                    text: 'Use this icon'
+                },
+                multiple: false
+            }).on('select', function() {
+                var attachment = customUploader.state().get('selection').first().toJSON();
+                // if (attachment.width !== attachment.height) {
+                //     alert('Please select a square icon.');
+                //     return;
+                // }
+                $('#midrocket_chatbot_gpt_icon').val(attachment.url);
+                $('.midrocket-chatbot-icon-preview').html('<div class="box-preview"><img src="' + attachment.url + '" alt="Icon Preview" style="max-width: 100px; max-height: 100px;"></div>');
+                $('.midrocket-chatbot-remove-icon').show();
+            }).open();
+        });
+
+        $('.midrocket-chatbot-remove-icon').click(function(e) {
+            e.preventDefault();
+            $('#midrocket_chatbot_gpt_icon').val('');
+            $('.midrocket-chatbot-icon-preview').html('');
+            $(this).hide();
+        });
+    });
+    </script>
+    <?php
+}
+
+function midrocket_chatbot_gpt_button_color_render() {
+    $options = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <input type="hidden" name="midrocket_chatbot_gpt_options[button_color]" value="0">
+    <input type='text' class='color-picker' name='midrocket_chatbot_gpt_options[button_color]' value='<?php echo esc_attr($options['button_color'] ?? ''); ?>' >
+    <?php
+}
+function midrocket_chatbot_gpt_button_background_color_render() {
+    $options = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <input type="hidden" name="midrocket_chatbot_gpt_options[button_background_color]" value="0">
+    <input type='text' class='color-picker' name='midrocket_chatbot_gpt_options[button_background_color]' value='<?php echo esc_attr($options['button_background_color'] ?? ''); ?>' >
+    <?php
+}
+function midrocket_chatbot_gpt_header_color_render() {
+    $options = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <input type="hidden" name="midrocket_chatbot_gpt_options[header_color]" value="0">
+    <input type='text' class='color-picker' name='midrocket_chatbot_gpt_options[header_color]' value='<?php echo esc_attr($options['header_color'] ?? ''); ?>' >
+    <?php
+}
+function midrocket_chatbot_gpt_header_background_color_render() {
+    $options = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <input type="hidden" name="midrocket_chatbot_gpt_options[header_background_color]" value="0">
+    <input type='text' class='color-picker' name='midrocket_chatbot_gpt_options[header_background_color]' value='<?php echo esc_attr($options['header_background_color'] ?? ''); ?>' >
+    <?php
+}
+
 
 function midrocket_chatbot_gpt_api_key_render() {
     $options        = get_option('midrocket_chatbot_gpt_options');
@@ -343,18 +583,54 @@ function midrocket_chatbot_gpt_options_validate($input)
 {
     $current_options = get_option('midrocket_chatbot_gpt_options');
 
+    // API
     if(isset($input['api_key'])) {
         $current_options['api_key'] = sanitize_text_field($input['api_key']);
     }
     if(in_array($input['gpt_model'], ['gpt-3.5-turbo', 'gpt-4'])) {
         $current_options['gpt_model'] = $input['gpt_model'];
     }
+
+    // Style
     if(isset($input['intro_message'])) {
-        $current_options['intro_message'] = sanitize_text_field($input['intro_message']);
+        $current_options['intro_message'] = sanitize_textarea_field($input['intro_message']);
     }
+    if(isset($input['bot_title'])) {
+        $current_options['bot_title'] = sanitize_text_field($input['bot_title']);
+    }
+    if(isset($input['opened_by_default'])) {
+        $current_options['opened_by_default'] = isset($input['opened_by_default']) ? (bool) $input['opened_by_default'] : false;
+    }
+    if(isset($input['default_mode'])) {
+        $current_options['default_mode'] = in_array($input['default_mode'], ['light', 'dark']) ? $input['default_mode'] : 'light';
+    }
+    if(isset($input['dark_mode_toggle'])) {
+        $current_options['dark_mode_toggle'] = isset($input['dark_mode_toggle']) ? (bool) $input['dark_mode_toggle'] : false;
+    }
+    if(isset($input['position'])) {
+        $current_options['position'] = in_array($input['position'], ['bottom_right', 'bottom_left']) ? $input['position'] : 'bottom_right';
+    }
+    if(isset($input['icon'])) {
+        $current_options['icon'] = sanitize_text_field($input['icon'] ?? '');
+    }
+    if (isset($input['button_color'])) { // Check HEX:  && preg_match('/^#[a-fA-F0-9]{6}$/', $input['button_color'])
+        $current_options['button_color'] = $input['button_color']; 
+    }
+    if (isset($input['button_background_color'])) {
+        $current_options['button_background_color'] = $input['button_background_color'];
+    }
+    if (isset($input['header_color'])) {
+    $current_options['header_color'] = $input['header_color'];
+}
+    if (isset($input['header_background_color'])) {
+        $current_options['header_background_color'] = $input['header_background_color'];
+    }
+
+    // Main
     if(isset($input['rules_prompt'])) {
         $current_options['rules_prompt'] = sanitize_textarea_field($input['rules_prompt']);
     }
+    // Knowledge
     if (isset($input['knowledge']) && is_array($input['knowledge'])) {
         $current_options['knowledge'] = [];
         foreach ($input['knowledge'] as $index => $qa) {
@@ -384,4 +660,25 @@ function example_collapsible($content, $example_title = null)
 </div>
 <?php
 }
-?>
+function midrocket_chatbot_gpt_enqueue_color_picker($hook_suffix) {
+    // Asegúrate de que este script se carga solo en la página de configuración de tu plugin
+    if('toplevel_page_midrocket_chatbot_gpt_settings' !== $hook_suffix)
+        return;
+
+    wp_enqueue_style('wp-color-picker');
+    wp_enqueue_script('wp-color-picker');
+    wp_enqueue_media(); // Esto permitirá que el botón de subida funcione
+    add_action('admin_footer', 'midrocket_chatbot_gpt_color_picker_script'); // Agrega el script al final de la página
+}
+
+add_action('admin_enqueue_scripts', 'midrocket_chatbot_gpt_enqueue_color_picker');
+
+function midrocket_chatbot_gpt_color_picker_script() {
+    ?>
+    <script>
+        jQuery(document).ready(function($){
+            $('.color-picker').wpColorPicker();
+        });
+    </script>
+    <?php
+}

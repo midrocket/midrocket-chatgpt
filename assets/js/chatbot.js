@@ -1,9 +1,9 @@
 let conversationHistory = [];
 let isFirstMessage = true;
 
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
 
-    $('#chatbot-input').on('input', function() {
+    $('#chatbot-input').on('input', function () {
         if ($(this).val().trim().length > 0) {
             $('#chatbot-send-btn').prop('disabled', false);
         } else {
@@ -11,8 +11,8 @@ jQuery(document).ready(function($) {
         }
     });
 
-    $('#chatbot-input').keypress(function(e) {
-        if(e.which == 13) { // Enter key pressed
+    $('#chatbot-input').keypress(function (e) {
+        if (e.which == 13) { // Enter key pressed
             if (!$('#chatbot-send-btn').prop('disabled')) {
                 $('#chatbot-send-btn').click();
             }
@@ -20,10 +20,10 @@ jQuery(document).ready(function($) {
         }
     });
 
-    $('#chatbot-send-btn').click(function() {
+    $('#chatbot-send-btn').click(function () {
         var message = $('#chatbot-input').val();
-        conversationHistory.push({role: "user", content: message});
-        
+        conversationHistory.push({ role: "user", content: message });
+
         $('#chatbot-messages').prepend('<div class="user-message">' + message + '</div>');
         $('#chatbot-messages').prepend('<div class="typing-message"><div class="typing"><span></span><span></span><span></span></div></div>');
         $('#chatbot-input').val(' ').prop('disabled', true); // Hide placeholder
@@ -40,13 +40,13 @@ jQuery(document).ready(function($) {
                 message: JSON.stringify(conversationHistory),
                 isFirstMessage: isFirstMessage
             },
-            success: function(response) {
+            success: function (response) {
                 $('.typing-message').remove();
                 $('#chatbot-messages').prepend('<div class="chatbot-response">' + response + '</div>');
-                conversationHistory.push({role: "assistant", content: response});
+                conversationHistory.push({ role: "assistant", content: response });
                 isFirstMessage = false;
             },
-            complete: function() {
+            complete: function () {
                 $('#chatbot-send-btn').prop('disabled', false);
                 $('#chatbot-input').val('').prop('disabled', false).focus();
                 $('#chatbot-loading').hide();
@@ -54,4 +54,13 @@ jQuery(document).ready(function($) {
         });
     });
 
+    $('.chatbot-darkmode').click(function () {
+        $('#chatbot-container').toggleClass('mode-dark');
+    });
+
+    $('.chatbot-opener').click(function () {
+        $('#chatbot-container').toggleClass('status-closed');
+        $('#chatbot-bubble').toggleClass('status-closed');
+    });
+    
 });

@@ -140,3 +140,16 @@ button#midrocket_chatbot_gpt_connect_btn {
   color: #d63638!important;
   border-color: #d63638!important;
 }
+
+.midrocket-chatbot-icon-preview .box-preview {
+	display: block;
+	width: 100px;
+	height: 100px;
+	margin-bottom: 0.5rem;
+}
+
+.midrocket-chatbot-icon-preview .box-preview img {
+	position: absolute;
+	object-fit: cover;
+	height: 100%;
+}
