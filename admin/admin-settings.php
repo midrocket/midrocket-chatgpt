@@ -256,13 +256,41 @@ function midrocket_chatbot_gpt_settings_init()
         'midrocket_chatbot_gpt_settings_api',
         'midrocket_chatbot_gpt_settings_api_section'
     );
-
     add_settings_field(
         'midrocket_chatbot_gpt_model',
         'GPT Version',
         'midrocket_chatbot_gpt_model_render',
         'midrocket_chatbot_gpt_settings_api',
         'midrocket_chatbot_gpt_settings_api_section'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_separator_api',
+        '',
+        'midrocket_chatbot_gpt_separator_render',
+        'midrocket_chatbot_gpt_settings_api',
+        'midrocket_chatbot_gpt_settings_api_section'
+    );
+
+    // API / Amazon
+    add_settings_section(
+        'midrocket_chatbot_gpt_settings_amazon_api_section',
+        'Amazon PA Settings',
+        'midrocket_chatbot_gpt_amazon_api_settings_section_callback',
+        'midrocket_chatbot_gpt_settings_api'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_amazon_api_key',
+        'Access Key',
+        'midrocket_chatbot_gpt_amazon_access_key_render',
+        'midrocket_chatbot_gpt_settings_api',
+        'midrocket_chatbot_gpt_settings_amazon_api_section'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_amazon_secret_key',
+        'Secret Key',
+        'midrocket_chatbot_gpt_amazon_secret_key_render',
+        'midrocket_chatbot_gpt_settings_api',
+        'midrocket_chatbot_gpt_settings_amazon_api_section'
     );
 
 }
@@ -283,11 +311,18 @@ function midrocket_chatbot_gpt_api_settings_section_callback()
     $api_key = isset($options['api_key']) ? $options['api_key'] : null;
     if(!$api_key) {
         echo '<div class="notice notice-info">
-            <p>You can obtain your API Key from OpenAI under <a href="https://platform.openai.com/api-keys" target="_blank"><strong>API Keys</strong></a> <a href="https://platform.openai.com/api-keys" target="_blank" style="text-decoration: none"><i class="fi fi-rr-up-right-from-square"></i></a>.</p>
+            <p>You can obtain your API Key from OpenAI in <a href="https://platform.openai.com/api-keys" target="_blank"><strong>API Keys</strong></a> <a href="https://platform.openai.com/api-keys" target="_blank" style="text-decoration: none"><i class="fi fi-rr-up-right-from-square"></i></a>.</p>
         </div>';
     }
     echo '<div>
-            <p>You can obtain your API Key from OpenAI under <a href="https://platform.openai.com/api-keys" target="_blank"><strong>API Keys</strong></a> <a href="https://platform.openai.com/api-keys" target="_blank" style="text-decoration: none"><i class="fi fi-rr-up-right-from-square"></i></a>.</p>
+            <p>You can obtain your API Key from OpenAI in <a href="https://platform.openai.com/api-keys" target="_blank"><strong>API Keys</strong></a> <a href="https://platform.openai.com/api-keys" target="_blank" style="text-decoration: none"><i class="fi fi-rr-up-right-from-square"></i></a>.</p>
+        </div>';
+}
+
+function midrocket_chatbot_gpt_amazon_api_settings_section_callback()
+{
+    echo '<div>
+            <p>You can obtain your PA API Key from Amazon Affiliates in <a href="https://affiliate-program.amazon.com/assoc_credentials/home" target="_blank"><strong>Credentials</strong></a> <a href="https://affiliate-program.amazon.com/assoc_credentials/home" target="_blank" style="text-decoration: none"><i class="fi fi-rr-up-right-from-square"></i></a>.</p>
         </div>';
 }
 
@@ -516,18 +551,15 @@ function midrocket_chatbot_gpt_header_background_color_render() {
 
 function midrocket_chatbot_gpt_api_key_render() {
     $options        = get_option('midrocket_chatbot_gpt_options');
-    $api_key_status = !empty($options['api_key_status']) ? $options['api_key_status'] : '';
-
     ?>
     <div class="cgpt-flex">
-        <input type='text' id='midrocket_chatbot_gpt_api_key' name='midrocket_chatbot_gpt_options[api_key]' value='<?php echo esc_attr($options['api_key']); ?>'>
+        <input type='text' id='midrocket_chatbot_gpt_api_key' name='midrocket_chatbot_gpt_options[api_key]' value='<?php echo esc_attr($options['api_key'] ?? ''); ?>'>
         <button type="button" id="midrocket_chatbot_gpt_connect_btn" class="button button-secondary">
             <?php echo __('Test connection', 'midrocket-chatgpt'); ?>
             <span class="spinner is-active"></span>
         </button>
-        <span id="midrocket_chatbot_gpt_api_key_status">
+        <span id="midrocket_chatbot_gpt_api_key_status"></span>
     </div>
-    </span>
     
     <?php
 }
@@ -537,33 +569,50 @@ function midrocket_chatbot_gpt_model_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-<select name='midrocket_chatbot_gpt_options[gpt_model]'>
-    <option value='gpt-3.5-turbo' <?php selected(isset($options['gpt_model']) ? $options['gpt_model'] : '', 'gpt-3.5-turbo'); ?>>GPT-3.5
-        Turbo</option>
-    <option value='gpt-4' <?php selected(isset($options['gpt_model']) ? $options['gpt_model'] : '', 'gpt-4'); ?>>GPT-4
-    </option>
-</select>
-<?php
+    <select name='midrocket_chatbot_gpt_options[gpt_model]'>
+        <option value='gpt-3.5-turbo' <?php selected(isset($options['gpt_model']) ? $options['gpt_model'] : '', 'gpt-3.5-turbo'); ?>>GPT-3.5
+            Turbo</option>
+        <option value='gpt-4' <?php selected(isset($options['gpt_model']) ? $options['gpt_model'] : '', 'gpt-4'); ?>>GPT-4
+        </option>
+    </select>
+    <?php
 }
 
+function midrocket_chatbot_gpt_amazon_access_key_render() {
+    $options        = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <div class="cgpt-flex">
+        <input type='text' name='midrocket_chatbot_gpt_options[amazon_access_key]' value='<?php echo esc_attr($options['amazon_access_key'] ?? ''); ?>'>
+    </div>
+    <?php
+}
+
+function midrocket_chatbot_gpt_amazon_secret_key_render() {
+    $options        = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <div class="cgpt-flex">
+        <input type='text' name='midrocket_chatbot_gpt_options[amazon_secret_key]' value='<?php echo esc_attr($options['amazon_secret_key'] ?? ''); ?>'>
+    </div>
+    <?php
+}
 
 function midrocket_chatbot_gpt_intro_message_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-<input type='text' class='long-input' name='midrocket_chatbot_gpt_options[intro_message]'
-    value='<?php echo $options['intro_message']; ?>'
-    placeholder="Hi, I'm GreenTrend Chatbot! Do you have any questions?">
-<?php
+    <input type='text' class='long-input' name='midrocket_chatbot_gpt_options[intro_message]'
+        value='<?php echo $options['intro_message']; ?>'
+        placeholder="Hi, I'm GreenTrend Chatbot! Do you have any questions?">
+    <?php
 }
 
 function midrocket_chatbot_gpt_company_name_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-<input type='text' class='long-input' name='midrocket_chatbot_gpt_options[company_name]'
-    value='<?php echo $options['company_name']; ?>'>
-<?php
+    <input type='text' class='long-input' name='midrocket_chatbot_gpt_options[company_name]'
+        value='<?php echo $options['company_name'] ?? ""; ?>'>
+    <?php
 }
 
 
@@ -571,36 +620,36 @@ function midrocket_chatbot_gpt_rules_prompt_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-<div class="input-example">
-    <textarea name='midrocket_chatbot_gpt_options[rules_prompt]' rows='10'
-        cols='75'><?php echo $options['rules_prompt']; ?></textarea>
-    <?php example_collapsible(RULES_PROMPT); ?>
-</div>
-<?php
+    <div class="input-example">
+        <textarea name='midrocket_chatbot_gpt_options[rules_prompt]' rows='10'
+            cols='75'><?php echo $options['rules_prompt'] ?? ""; ?></textarea>
+        <?php example_collapsible(RULES_PROMPT); ?>
+    </div>
+    <?php
 }
 
 function midrocket_chatbot_gpt_specific_content_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-<div class="input-example">
-    <textarea name='midrocket_chatbot_gpt_options[specific_content]' rows='10' cols='75'
-        placeholder="Paste here all the content the chatbot should know to give answers"><?php echo $options['specific_content']; ?></textarea>
-    <?php example_collapsible(SPECIFIC_CONTENT_EXAMPLE); ?>
-</div>
-<?php
+    <div class="input-example">
+        <textarea name='midrocket_chatbot_gpt_options[specific_content]' rows='10' cols='75'
+            placeholder="Paste here all the content the chatbot should know to give answers"><?php echo $options['specific_content'] ?? ""; ?></textarea>
+        <?php example_collapsible(SPECIFIC_CONTENT_EXAMPLE); ?>
+    </div>
+    <?php
 }
 
 function midrocket_chatbot_gpt_tematic_prompt_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
-<div class="input-example">
-    <textarea name='midrocket_chatbot_gpt_options[tematic_prompt]' rows='10'
-        cols='75'><?php echo !empty($options['tematic_prompt']) ? $options['tematic_prompt'] : '(Ejemplo actual) '.TEMATIC_PROMPT; ?></textarea>
-    <?php example_collapsible(TEMATIC_PROMPT); ?>
-</div>
-<?php
+    <div class="input-example">
+        <textarea name='midrocket_chatbot_gpt_options[tematic_prompt]' rows='10'
+            cols='75'><?php echo !empty($options['tematic_prompt']) ? $options['tematic_prompt'] : '(Ejemplo actual) '.TEMATIC_PROMPT; ?></textarea>
+        <?php example_collapsible(TEMATIC_PROMPT); ?>
+    </div>
+    <?php
 }
 
 function midrocket_chatbot_gpt_options_validate($input)
@@ -613,6 +662,12 @@ function midrocket_chatbot_gpt_options_validate($input)
     }
     if(in_array($input['gpt_model'], ['gpt-3.5-turbo', 'gpt-4'])) {
         $current_options['gpt_model'] = $input['gpt_model'];
+    }
+    if(isset($input['amazon_access_key'])) {
+        $current_options['amazon_access_key'] = sanitize_text_field($input['amazon_access_key']);
+    }
+    if(isset($input['amazon_secret_key'])) {
+        $current_options['amazon_secret_key'] = sanitize_text_field($input['amazon_secret_key']);
     }
 
     // Style

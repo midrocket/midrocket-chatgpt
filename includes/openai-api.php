@@ -4,7 +4,6 @@ function ask_openai($conversation_history, $isFirstMessage, $api_key_override = 
 
     $options            = get_option('midrocket_chatbot_gpt_options');
 
-    //$api_key            = $options['api_key'] ?? '';
     $api_key            = $api_key_override ?? $options['api_key'] ?? '';
     $rules_prompt       = !empty($options['rules_prompt']) ? $options['rules_prompt'] : RULES_PROMPT;
     $gpt_model          = !empty($options['gpt_model']) ? $options['gpt_model'] : 'gpt-3.5-turbo';
@@ -28,8 +27,9 @@ function ask_openai($conversation_history, $isFirstMessage, $api_key_override = 
             }
         }
 
-        // AMAZON: include more rules directly from amazon plugin
-        // add_filter('chatgpt_filter_rules_prompt', $rules_prompt)
+        // Filter: Modify existing $rules_prompt
+        $rules_prompt = apply_filters('chatbotgpt_filter_rules_prompt', $rules_prompt);
+
         array_unshift($conversation_history, [
             'role' => 'system',
             'content' => $rules_prompt
@@ -61,6 +61,9 @@ function ask_openai($conversation_history, $isFirstMessage, $api_key_override = 
 
     $response = json_decode($result, true);
 
+    // Filter: Check answer and filter
+    $response = apply_filters('chatbotgpt_filter_response_before', $response);
+
     return $response;
 }
 
@@ -79,7 +82,8 @@ function handle_chatbot_conversation() {
 
         // AMAZON: IF nos devuelve un formato de respuesta establecido en reglas que es tipo "keyword" esta incluido aqui hacemos otro ask_openai
         // add_filter('chatgpt_filter_response_before')
-        echo esc_html( $response['choices'][0]['message']['content'] );
+        // echo esc_html( $response['choices'][0]['message']['content'] );
+        echo $response['choices'][0]['message']['content'];
     } else {
         print_r($response);
         echo 'Lo siento, no pude procesar tu solicitud.';
