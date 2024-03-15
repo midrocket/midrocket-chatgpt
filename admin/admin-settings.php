@@ -618,7 +618,7 @@ function midrocket_chatbot_gpt_intro_message_render()
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
     <input type='text' class='long-input' name='midrocket_chatbot_gpt_options[intro_message]'
-        value='<?php echo $options['intro_message']; ?>'
+        value='<?php echo $options['intro_message'] ?? ''; ?>'
         placeholder="Hi, I'm GreenTrend Chatbot! Do you have any questions?">
     <?php
 }
