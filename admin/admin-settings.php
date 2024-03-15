@@ -677,7 +677,7 @@ function midrocket_chatbot_gpt_options_validate($input)
     if(isset($input['api_key'])) {
         $current_options['api_key'] = sanitize_text_field($input['api_key']);
     }
-    if(in_array($input['gpt_model'], ['gpt-3.5-turbo', 'gpt-4'])) {
+    if(isset($input['gpt_model']) && is_array($input['gpt_model']) && in_array($input['gpt_model'], ['gpt-3.5-turbo', 'gpt-4'])) {
         $current_options['gpt_model'] = $input['gpt_model'];
     }
     if(isset($input['amazon_access_key'])) {
