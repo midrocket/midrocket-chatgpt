@@ -67,6 +67,12 @@ function chatbot_add_footer_html() {
             </div>
         </div>
         <div id="chatbot-messages">
+        <?php 
+            // Delete this clause + else and closing (only testing purposes)
+            if(isset($_GET['super'])){
+                echo '<pre>'.print_r(amazon_pa_api_search_products('taza de te')).'</pre>'; 
+            }else{
+        ?>
             <div id="chatbot-intro">
             <?php 
             if(empty($error)){
@@ -76,6 +82,7 @@ function chatbot_add_footer_html() {
                 echo $error; 
             }
             ?>
+        <?php } ?>
             </div>
         </div>
         <?php if(empty($error)){ ?>
@@ -88,4 +95,13 @@ function chatbot_add_footer_html() {
     </div>
     <?php
 }
+
+// Dev purposes: limit only logged in users
+//function chatbot_conditional_footer_html() {
+//    if ( is_user_logged_in() && current_user_can('manage_options') ) {
+//        add_action('wp_footer', 'chatbot_add_footer_html');
+//    }
+//}
+//add_action('init', 'chatbot_conditional_footer_html');
+
 add_action('wp_footer', 'chatbot_add_footer_html');

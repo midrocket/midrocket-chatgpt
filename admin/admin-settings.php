@@ -292,6 +292,14 @@ function midrocket_chatbot_gpt_settings_init()
         'midrocket_chatbot_gpt_settings_api',
         'midrocket_chatbot_gpt_settings_amazon_api_section'
     );
+    add_settings_field(
+        'midrocket_chatbot_gpt_amazon_partner_tag',
+        'Partner Tag',
+        'midrocket_chatbot_gpt_amazon_partner_tag_render',
+        'midrocket_chatbot_gpt_settings_api',
+        'midrocket_chatbot_gpt_settings_amazon_api_section'
+    );
+    
 
 }
 add_action('admin_init', 'midrocket_chatbot_gpt_settings_init');
@@ -596,6 +604,15 @@ function midrocket_chatbot_gpt_amazon_secret_key_render() {
     <?php
 }
 
+function midrocket_chatbot_gpt_amazon_partner_tag_render() {
+    $options        = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <div class="cgpt-flex">
+        <input type='text' name='midrocket_chatbot_gpt_options[amazon_partner_tag]' value='<?php echo esc_attr($options['amazon_partner_tag'] ?? ''); ?>'>
+    </div>
+    <?php
+}
+
 function midrocket_chatbot_gpt_intro_message_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
@@ -668,6 +685,9 @@ function midrocket_chatbot_gpt_options_validate($input)
     }
     if(isset($input['amazon_secret_key'])) {
         $current_options['amazon_secret_key'] = sanitize_text_field($input['amazon_secret_key']);
+    }
+    if(isset($input['amazon_partner_tag'])) {
+        $current_options['amazon_partner_tag'] = sanitize_text_field($input['amazon_partner_tag']);
     }
 
     // Style
