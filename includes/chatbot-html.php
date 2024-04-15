@@ -9,6 +9,16 @@ function chatbot_load() {
     
 }
 
+function chatbot_custom_css() {
+    
+    $options            = get_option('midrocket_chatbot_gpt_options');
+    $custom_css         = !empty($options['custom_css']) ? $options['custom_css'] : null;
+    if($custom_css){
+        echo '<style>'.$custom_css.'</style>';
+    }
+    
+}
+
 function chatbot_html_box($autoload = false){
     global $chatbot_loaded;
 
@@ -30,11 +40,12 @@ function chatbot_html_box($autoload = false){
 
     // Style
     $bot_name           = !empty($options['bot_title']) ? $options['bot_title'] : 'Chatbot';
-    $autoload_footer    = !empty($options['autoload_footer']) ? true : null;
+    $intro_message      = !empty($options['intro_message']) ? $options['intro_message'] : INTRO_MSG_NOT_PROMPT;
+    $send_button        = !empty($options['send_button']) ? $options['send_button'] : __('Send', 'midrocket-chatgpt');
+    $message_placeholder = !empty($options['message_placeholder']) ? $options['message_placeholder'] : __('Write your message here...', 'midrocket-chatgpt');
     $opened_by_default  = !empty($options['opened_by_default']) ? 'default-opened' : 'status-closed';
     $default_mode       = !empty($options['default_mode']) ? $options['default_mode'] : 'light';
     $dark_mode_toggle   = !empty($options['dark_mode_toggle']) ? $options['dark_mode_toggle'] : null;
-    $intro_message      = !empty($options['intro_message']) ? $options['intro_message'] : INTRO_MSG_NOT_PROMPT;
     $icon               = !empty($options['icon']) ? '<div class="custom-icon"><img src="'.$options['icon'].'"></div>' : '<i class="fi fi-rr-chatbot-speech-bubble"></i>';
     $button_color       = !empty($options['button_color']) ? $options['button_color'] : null;
     $button_background_color = !empty($options['button_background_color']) ? $options['button_background_color'] : null;
@@ -44,16 +55,16 @@ function chatbot_html_box($autoload = false){
     $position           = !empty($options['position']) ? $options['position'] : 'bottom_right';
 
     if($button_color){
-        echo "<style>:root { --chatbot-button-color: $button_color;}</style>";
+        echo "<style>:root { --chatbot-button-color: $button_color!important;}</style>";
     }
     if($button_background_color){
-        echo "<style>:root { --chatbot-button-bg-color: $button_background_color;}</style>";
+        echo "<style>:root { --chatbot-button-bg-color: $button_background_color!important;}</style>";
     }
     if($header_color){
-        echo "<style>:root { --chatbot-header-color: $header_color;}</style>";
+        echo "<style>:root { --chatbot-header-color: $header_color!important;}</style>";
     }
     if($header_background_color){
-        echo "<style>:root { --chatbot-header-bg-color: $header_background_color;}</style>";
+        echo "<style>:root { --chatbot-header-bg-color: $header_background_color!important;}</style>";
     }
 
     $error = '';
@@ -105,8 +116,8 @@ function chatbot_html_box($autoload = false){
         <?php if(empty($error)){ ?>
             <div class="chatbot-actions">
             <div id="chatbot-loading"><div class="spinner"><div class="shape"><div></div></div></div></div>
-            <input type="text" id="chatbot-input" placeholder="<?php echo __('Write your message here...', 'midrocket-chatgpt'); ?>" />
-            <button id="chatbot-send-btn" disabled><?php echo __('Send', 'midrocket-chatgpt'); ?></button>
+            <input type="text" id="chatbot-input" placeholder="<?php echo $message_placeholder; ?>" />
+            <button id="chatbot-send-btn" disabled><?php echo $send_button; ?></button>
         </div>
         <?php } ?>
     </div>
@@ -118,4 +129,5 @@ function chatbot_html_box($autoload = false){
 }
 
 add_action('wp_footer', 'chatbot_load');
+add_action('wp_footer', 'chatbot_custom_css');
 add_shortcode('chatbot', 'chatbot_html_box' );

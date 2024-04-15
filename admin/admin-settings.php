@@ -147,6 +147,20 @@ function midrocket_chatbot_gpt_settings_init()
         'midrocket_chatbot_gpt_settings_labels_section'
     );
     add_settings_field(
+        'midrocket_chatbot_gpt_send_button',
+        'Send Button',
+        'midrocket_chatbot_gpt_send_button_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_labels_section'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_message_placeholder',
+        'Message Placeholder',
+        'midrocket_chatbot_gpt_message_placeholder_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_labels_section'
+    );
+    add_settings_field(
         'midrocket_chatbot_gpt_separator_labels',
         '',
         'midrocket_chatbot_gpt_separator_render',
@@ -262,6 +276,21 @@ function midrocket_chatbot_gpt_settings_init()
         'midrocket_chatbot_gpt_settings_style',
         'midrocket_chatbot_gpt_settings_customization_section'
     );    
+
+    // Style / Customization
+    add_settings_section(
+        'midrocket_chatbot_gpt_settings_custom_code_section',
+        'Custom code',
+        'midrocket_chatbot_gpt_custom_code_section_callback',
+        'midrocket_chatbot_gpt_settings_style'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_custom_css',
+        'Custom CSS',
+        'midrocket_chatbot_gpt_custom_css_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_custom_code_section'
+    );
 
     // API
     add_settings_section(
@@ -431,6 +460,32 @@ function midrocket_chatbot_gpt_bot_title_render() {
     <input type="text" name="midrocket_chatbot_gpt_options[bot_title]" value="<?php echo esc_attr($options['bot_title'] ?? ''); ?>" placeholder="GreenTrends' Bot">
     <?php
 }
+function midrocket_chatbot_gpt_intro_message_render()
+{
+    $options = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <input type='text' class='long-input' name='midrocket_chatbot_gpt_options[intro_message]'
+        value='<?php echo $options['intro_message'] ?? ''; ?>'
+        placeholder="Hi, I'm GreenTrend Chatbot! Do you have any questions?">
+    <?php
+}
+
+function midrocket_chatbot_gpt_send_button_render() {
+    $options = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <input type="text" name="midrocket_chatbot_gpt_options[send_button]" value="<?php echo esc_attr($options['send_button'] ?? ''); ?>" placeholder="Send">
+    <?php
+}
+function midrocket_chatbot_gpt_message_placeholder_render()
+{
+    $options = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <input type='text' class='long-input' name='midrocket_chatbot_gpt_options[message_placeholder]'
+        value='<?php echo $options['message_placeholder'] ?? ''; ?>'
+        placeholder="Write your message here...">
+    <?php
+}
+
 
 // Style / Visibility
 function midrocket_chatbot_gpt_visibility_section_callback() {
@@ -489,35 +544,7 @@ function midrocket_chatbot_gpt_dark_mode_toggle_render() {
 function midrocket_chatbot_gpt_customization_section_callback() {
     echo '<p>Customize the appearance of the chatbot. This customizations do not apply in <strong>Dark Mode.</strong></p>';
 }
-function midrocket_chatbot_gpt_icon_render_old() {
-    $options = get_option('midrocket_chatbot_gpt_options');
-    // Utiliza wp_enqueue_media() para permitir subir archivos
-    ?>
-    <input type='text' id='midrocket_chatbot_gpt_icon' name='midrocket_chatbot_gpt_options[icon]' value='<?php echo esc_attr($options['icon'] ?? ''); ?>'>
-    <button type="button" class="button" onclick="uploadIcon()">Upload Icon</button>
-    <script>
-    function uploadIcon() {
-        var mediaUploader;
-        if (mediaUploader) {
-            mediaUploader.open();
-            return;
-        }
-        mediaUploader = wp.media.frames.file_frame = wp.media({
-            title: 'Choose Icon',
-            button: {
-                text: 'Choose Icon'
-            },
-            multiple: false
-        });
-        mediaUploader.on('select', function() {
-            var attachment = mediaUploader.state().get('selection').first().toJSON();
-            jQuery('#midrocket_chatbot_gpt_icon').val(attachment.url);
-        });
-        mediaUploader.open();
-    }
-    </script>
-    <?php
-}
+
 function midrocket_chatbot_gpt_icon_render() {
     $options = get_option('midrocket_chatbot_gpt_options');
     $icon_url = !empty($options['icon']) ? esc_url($options['icon']) : '';
@@ -594,7 +621,21 @@ function midrocket_chatbot_gpt_header_background_color_render() {
     <?php
 }
 
+// Style / Custom code
+function midrocket_chatbot_gpt_custom_code_section_callback() {
+    echo '<p>Customize the appearance of the chatbot using css code.</p>';
+}
+function midrocket_chatbot_gpt_custom_css_render()
+{
+    $options = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <textarea name='midrocket_chatbot_gpt_options[custom_css]' rows='10'
+            cols='75'><?php echo $options['custom_css'] ?? ""; ?></textarea>
+    <?php
+}
 
+
+// API Settings
 function midrocket_chatbot_gpt_api_key_render() {
     $options        = get_option('midrocket_chatbot_gpt_options');
     ?>
@@ -648,16 +689,6 @@ function midrocket_chatbot_gpt_amazon_partner_tag_render() {
     <div class="cgpt-flex">
         <input type='text' name='midrocket_chatbot_gpt_options[amazon_partner_tag]' value='<?php echo esc_attr($options['amazon_partner_tag'] ?? ''); ?>'>
     </div>
-    <?php
-}
-
-function midrocket_chatbot_gpt_intro_message_render()
-{
-    $options = get_option('midrocket_chatbot_gpt_options');
-    ?>
-    <input type='text' class='long-input' name='midrocket_chatbot_gpt_options[intro_message]'
-        value='<?php echo $options['intro_message'] ?? ''; ?>'
-        placeholder="Hi, I'm GreenTrend Chatbot! Do you have any questions?">
     <?php
 }
 
@@ -729,11 +760,17 @@ function midrocket_chatbot_gpt_options_validate($input)
     }
 
     // Style
+    if(isset($input['bot_title'])) {
+        $current_options['bot_title'] = sanitize_text_field($input['bot_title']);
+    }
     if(isset($input['intro_message'])) {
         $current_options['intro_message'] = sanitize_textarea_field($input['intro_message']);
     }
-    if(isset($input['bot_title'])) {
-        $current_options['bot_title'] = sanitize_text_field($input['bot_title']);
+    if(isset($input['send_button'])) {
+        $current_options['send_button'] = sanitize_text_field($input['send_button']);
+    }
+    if(isset($input['message_placeholder'])) {
+        $current_options['message_placeholder'] = sanitize_textarea_field($input['message_placeholder']);
     }
     if(isset($input['autoload_footer'])) {
         $current_options['autoload_footer'] = isset($input['autoload_footer']) ? (bool) $input['autoload_footer'] : false;
@@ -764,6 +801,9 @@ function midrocket_chatbot_gpt_options_validate($input)
 }
     if (isset($input['header_background_color'])) {
         $current_options['header_background_color'] = $input['header_background_color'];
+    }
+    if(isset($input['custom_css'])) {
+        $current_options['custom_css'] = sanitize_textarea_field($input['custom_css']);
     }
 
     // Main
