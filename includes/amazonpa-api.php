@@ -115,11 +115,8 @@ function check_chatgpt_response_for_keyword($response) {
             $keyword = $keyword_json['keyword'];
 
             // Amazon API Call
-            // $products = amazon_pa_api_search_products($keyword);
-            // DUMMY UNTIL API
-            $products = json_decode('[{"_id":"65d7781df85193aecc780552","product_name":"Taza de plastico","product_price":"9,98€","product_picture":"http://placehold.it/32x32","product_url":"http://products.com/product/65d7781d172b80d521d29164"},{"_id":"65d7781df85193aecc780552","product_name":"Taza cerámica de te","product_price":"12,50€","product_picture":"http://placehold.it/32x32","product_url":"http://products.com/product/65d7781d172b80d521d29164"}]', true);
-            
-            $products_response = 'Keyword: '.$keyword;
+            $products = amazon_pa_api_search_products($keyword);
+
             if(!empty($products)){
                 $products_response .= '<ul class="product-list">';
                 foreach($products as $product){

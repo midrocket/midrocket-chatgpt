@@ -162,23 +162,16 @@ function midrocket_chatbot_gpt_settings_init()
         'midrocket_chatbot_gpt_settings_style'
     );
     add_settings_field(
+        'midrocket_chatbot_gpt_autoload_footer',
+        'Autoload widget',
+        'midrocket_chatbot_gpt_autoload_footer_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_visibility_section'
+    );
+    add_settings_field(
         'midrocket_chatbot_gpt_opened_by_default',
         'Opened by Default',
         'midrocket_chatbot_gpt_opened_by_default_render',
-        'midrocket_chatbot_gpt_settings_style',
-        'midrocket_chatbot_gpt_settings_visibility_section'
-    );
-    add_settings_field(
-        'midrocket_chatbot_gpt_default_mode',
-        'Default Mode',
-        'midrocket_chatbot_gpt_default_mode_render',
-        'midrocket_chatbot_gpt_settings_style',
-        'midrocket_chatbot_gpt_settings_visibility_section'
-    );
-    add_settings_field(
-        'midrocket_chatbot_gpt_dark_mode_toggle',
-        'Show Dark Mode Toggle',
-        'midrocket_chatbot_gpt_dark_mode_toggle_render',
         'midrocket_chatbot_gpt_settings_style',
         'midrocket_chatbot_gpt_settings_visibility_section'
     );
@@ -195,6 +188,35 @@ function midrocket_chatbot_gpt_settings_init()
         'midrocket_chatbot_gpt_separator_render',
         'midrocket_chatbot_gpt_settings_style',
         'midrocket_chatbot_gpt_settings_visibility_section'
+    );
+
+    // Style / Mode
+    add_settings_section(
+        'midrocket_chatbot_gpt_settings_mode_section',
+        'Mode',
+        'midrocket_chatbot_gpt_mode_section_callback',
+        'midrocket_chatbot_gpt_settings_style'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_default_mode',
+        'Default Mode',
+        'midrocket_chatbot_gpt_default_mode_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_mode_section'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_dark_mode_toggle',
+        'Show Dark Mode Toggle',
+        'midrocket_chatbot_gpt_dark_mode_toggle_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_mode_section'
+    );
+    add_settings_field(
+        'midrocket_chatbot_gpt_separator_visibility',
+        '',
+        'midrocket_chatbot_gpt_separator_render',
+        'midrocket_chatbot_gpt_settings_style',
+        'midrocket_chatbot_gpt_settings_mode_section'
     );
     
 
@@ -412,29 +434,22 @@ function midrocket_chatbot_gpt_bot_title_render() {
 
 // Style / Visibility
 function midrocket_chatbot_gpt_visibility_section_callback() {
-    echo '<p>Adjust visibility settings for the chatbot.</p>';
+    echo '<p>Adjust visibility settings for the chatbot. <strong>Do not apply in shortcode version [chatbot].</strong></p>';
 }
+
+function midrocket_chatbot_gpt_autoload_footer_render() {
+    $options = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <input type="hidden" name="midrocket_chatbot_gpt_options[autoload_footer]" value="0">
+    <input type="checkbox" name="midrocket_chatbot_gpt_options[autoload_footer]" <?php checked(isset($options['autoload_footer']) ? $options['autoload_footer'] : 0); ?> value="1">
+    <?php
+}
+
 function midrocket_chatbot_gpt_opened_by_default_render() {
     $options = get_option('midrocket_chatbot_gpt_options');
     ?>
     <input type="hidden" name="midrocket_chatbot_gpt_options[opened_by_default]" value="0">
     <input type="checkbox" name="midrocket_chatbot_gpt_options[opened_by_default]" <?php checked(isset($options['opened_by_default']) ? $options['opened_by_default'] : 0); ?> value="1">
-    <?php
-}
-function midrocket_chatbot_gpt_default_mode_render() {
-    $options = get_option('midrocket_chatbot_gpt_options');
-    ?>
-    <select name="midrocket_chatbot_gpt_options[default_mode]">
-        <option value="light" <?php selected(isset($options['default_mode']) ? $options['default_mode'] : '', 'light'); ?>>Light</option>
-        <option value="dark" <?php selected(isset($options['default_mode']) ? $options['default_mode'] : '', 'dark'); ?>>Dark</option>
-    </select>
-    <?php
-}
-function midrocket_chatbot_gpt_dark_mode_toggle_render() {
-    $options = get_option('midrocket_chatbot_gpt_options');
-    ?>
-    <input type="hidden" name="midrocket_chatbot_gpt_options[dark_mode_toggle]" value="0">
-    <input type="checkbox" name="midrocket_chatbot_gpt_options[dark_mode_toggle]" <?php checked(isset($options['dark_mode_toggle']) ? $options['dark_mode_toggle'] : 0); ?> value="1">
     <?php
 }
 function midrocket_chatbot_gpt_position_render() {
@@ -444,6 +459,29 @@ function midrocket_chatbot_gpt_position_render() {
         <option value="bottom_right" <?php selected(isset($options['position']) ? $options['position'] : '', 'bottom_right'); ?>>Bottom right</option>
         <option value="bottom_left" <?php selected(isset($options['position']) ? $options['position'] : '', 'bottom_left'); ?>>Bottom left</option>
     </select>
+    <?php
+}
+
+// Style / Mode
+function midrocket_chatbot_gpt_mode_section_callback() {
+    echo '<p>Adjust style settings for the chatbot mode.</p>';
+}
+
+function midrocket_chatbot_gpt_default_mode_render() {
+    $options = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <select name="midrocket_chatbot_gpt_options[default_mode]">
+        <option value="light" <?php selected(isset($options['default_mode']) ? $options['default_mode'] : '', 'light'); ?>>Light</option>
+        <option value="dark" <?php selected(isset($options['default_mode']) ? $options['default_mode'] : '', 'dark'); ?>>Dark</option>
+    </select>
+    <?php
+}
+
+function midrocket_chatbot_gpt_dark_mode_toggle_render() {
+    $options = get_option('midrocket_chatbot_gpt_options');
+    ?>
+    <input type="hidden" name="midrocket_chatbot_gpt_options[dark_mode_toggle]" value="0">
+    <input type="checkbox" name="midrocket_chatbot_gpt_options[dark_mode_toggle]" <?php checked(isset($options['dark_mode_toggle']) ? $options['dark_mode_toggle'] : 0); ?> value="1">
     <?php
 }
 
@@ -696,6 +734,9 @@ function midrocket_chatbot_gpt_options_validate($input)
     }
     if(isset($input['bot_title'])) {
         $current_options['bot_title'] = sanitize_text_field($input['bot_title']);
+    }
+    if(isset($input['autoload_footer'])) {
+        $current_options['autoload_footer'] = isset($input['autoload_footer']) ? (bool) $input['autoload_footer'] : false;
     }
     if(isset($input['opened_by_default'])) {
         $current_options['opened_by_default'] = isset($input['opened_by_default']) ? (bool) $input['opened_by_default'] : false;

@@ -297,6 +297,20 @@
   margin-left: 0.25rem;
 }
 
+/* Shortchode chat */
+#chatbot-bubble.shortcode-chat {
+	display: none;
+}
+
+#chatbot-container.shortcode-chat {
+	position: relative;
+	width: 100%;
+}
+
+.shortcode-chat .chatbot-close-btn {
+	display: none;
+}
+
 @keyframes spinner-animation {
 0% { transform: translate(-50%,-50%) rotate(0deg); }
 100% { transform: translate(-50%,-50%) rotate(360deg); }

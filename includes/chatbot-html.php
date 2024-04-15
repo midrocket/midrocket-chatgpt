@@ -1,5 +1,26 @@
 <?php
-function chatbot_add_footer_html() {
+function chatbot_load() {
+    
+    $options            = get_option('midrocket_chatbot_gpt_options');
+    $autoload_footer    = !empty($options['autoload_footer']) ? true : null;
+    if($autoload_footer){
+        chatbot_html_box($autoload_footer);
+    }
+    
+}
+
+function chatbot_html_box($autoload = false){
+    global $chatbot_loaded;
+
+    if(is_admin()){
+        return;
+    }
+
+    if ($chatbot_loaded) {
+        return '';
+    }
+    
+    $chatbot_loaded = true;
 
     $options            = get_option('midrocket_chatbot_gpt_options');
 
@@ -8,8 +29,8 @@ function chatbot_add_footer_html() {
     $rules_prompt       = !empty($options['rules_prompt']) ? $options['rules_prompt'] : null;
 
     // Style
-    // @TODO: opened_by_default
     $bot_name           = !empty($options['bot_title']) ? $options['bot_title'] : 'Chatbot';
+    $autoload_footer    = !empty($options['autoload_footer']) ? true : null;
     $opened_by_default  = !empty($options['opened_by_default']) ? 'default-opened' : 'status-closed';
     $default_mode       = !empty($options['default_mode']) ? $options['default_mode'] : 'light';
     $dark_mode_toggle   = !empty($options['dark_mode_toggle']) ? $options['dark_mode_toggle'] : null;
@@ -45,18 +66,21 @@ function chatbot_add_footer_html() {
     if(!$rules_prompt){
         $error = 'Error: System prompt not defined';
     }
+
+    $css_class = '';
+    if(!$autoload){
+        $css_class = 'shortcode-chat';
+        ob_start();
+    }
     ?>
-
-    <?php // if($opened_by_default === 'status-closed'){ ?>
-        <div class="chatbot-opener mode-<?php echo $default_mode; ?> <?php echo ($opened_by_default === 'status-closed') ? '' : 'status-closed'; ?> " id="chatbot-bubble">
-            <div class="chatbot-bubble-inner">
-                <div class="chatbot-icon"><?php echo $icon; ?></div>
-                <div class="chatbot-name"><?php echo $bot_name; ?></div>
-            </div>
+    <div class="chatbot-opener mode-<?php echo $default_mode; ?> <?php echo ($opened_by_default === 'status-closed') ? '' : 'status-closed'; ?> <?php echo $css_class; ?>" id="chatbot-bubble">
+        <div class="chatbot-bubble-inner">
+            <div class="chatbot-icon"><?php echo $icon; ?></div>
+            <div class="chatbot-name"><?php echo $bot_name; ?></div>
         </div>
-    <?php // } ?>
+    </div>
 
-    <div id="chatbot-container" class="position-<?php echo $position; ?> mode-<?php echo $default_mode; ?> <?php echo $opened_by_default; ?>">
+    <div id="chatbot-container" class="position-<?php echo $position; ?> mode-<?php echo $default_mode; ?> <?php echo $opened_by_default; ?> <?php echo $css_class; ?>">
         <div id="chatbot-header">
             <div class="chatbot-name"><?php echo $bot_name; ?></div>
             <div class="chatbot-head-actions">
@@ -67,12 +91,6 @@ function chatbot_add_footer_html() {
             </div>
         </div>
         <div id="chatbot-messages">
-        <?php 
-            // Delete this clause + else and closing (only testing purposes)
-            if(isset($_GET['super'])){
-                echo '<pre>'.print_r(amazon_pa_api_search_products('taza de te')).'</pre>'; 
-            }else{
-        ?>
             <div id="chatbot-intro">
             <?php 
             if(empty($error)){
@@ -82,7 +100,6 @@ function chatbot_add_footer_html() {
                 echo $error; 
             }
             ?>
-        <?php } ?>
             </div>
         </div>
         <?php if(empty($error)){ ?>
@@ -94,14 +111,11 @@ function chatbot_add_footer_html() {
         <?php } ?>
     </div>
     <?php
+    if(!$autoload){
+        $html = ob_get_clean();
+        return $html;
+    }
 }
 
-// Dev purposes: limit only logged in users
-//function chatbot_conditional_footer_html() {
-//    if ( is_user_logged_in() && current_user_can('manage_options') ) {
-//        add_action('wp_footer', 'chatbot_add_footer_html');
-//    }
-//}
-//add_action('init', 'chatbot_conditional_footer_html');
-
-add_action('wp_footer', 'chatbot_add_footer_html');
+add_action('wp_footer', 'chatbot_load');
+add_shortcode('chatbot', 'chatbot_html_box' );

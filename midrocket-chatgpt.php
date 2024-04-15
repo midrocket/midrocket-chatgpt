@@ -3,7 +3,7 @@
  * Plugin Name: ChatGPT for Wordpress
  * Plugin URI: https://www.midrocket.com
  * Description: ChatGPT integration for Wordpress.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: Midrocket
  * Author URI: https://www.midrocket.com
  */

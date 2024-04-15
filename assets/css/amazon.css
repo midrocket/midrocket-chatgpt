@@ -46,3 +46,9 @@ li.product-item .product-image img {
 	display: flex;
 	flex-direction: column;
 }
+
+.product-item .product-action {
+	align-items: center;
+	display: flex;
+	padding-right: 0.5rem;
+}
