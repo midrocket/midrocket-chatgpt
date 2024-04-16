@@ -47,7 +47,6 @@ jQuery(document).ready(function ($) {
                 isFirstMessage = false;
             },
             complete: function () {
-                $('#chatbot-send-btn').prop('disabled', false);
                 $('#chatbot-input').val('').prop('disabled', false).focus();
                 $('#chatbot-loading').hide();
             }
