@@ -1,7 +1,0 @@
-rsync -avz --exclude='.git' -e "ssh -p 18765" ./ u17-vqdpw9gs7j02@c1101992.sgvps.net:www/chatbot.midrocket.com/public_html/wp-content/plugins/midrocket-chatgpt
-
-// Sync with deletion
-rsync -avz --exclude='.git' -e "ssh -p 18765" ./ u17-vqdpw9gs7j02@c1101992.sgvps.net:www/chatbot.midrocket.com/public_html/wp-content/plugins/midrocket-chatgpt --delete
-
-// Old method
-scp -P 18765 -r ./ u17-vqdpw9gs7j02@c1101992.sgvps.net:/www/chatbot.midrocket.com/public_html/wp-content/plugins/midrocket-chatgpt

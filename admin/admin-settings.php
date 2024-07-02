@@ -321,35 +321,6 @@ function midrocket_chatbot_gpt_settings_init()
         'midrocket_chatbot_gpt_settings_api',
         'midrocket_chatbot_gpt_settings_api_section'
     );
-
-    // API / Amazon
-    add_settings_section(
-        'midrocket_chatbot_gpt_settings_amazon_api_section',
-        'Amazon PA Settings',
-        'midrocket_chatbot_gpt_amazon_api_settings_section_callback',
-        'midrocket_chatbot_gpt_settings_api'
-    );
-    add_settings_field(
-        'midrocket_chatbot_gpt_amazon_api_key',
-        'Access Key',
-        'midrocket_chatbot_gpt_amazon_access_key_render',
-        'midrocket_chatbot_gpt_settings_api',
-        'midrocket_chatbot_gpt_settings_amazon_api_section'
-    );
-    add_settings_field(
-        'midrocket_chatbot_gpt_amazon_secret_key',
-        'Secret Key',
-        'midrocket_chatbot_gpt_amazon_secret_key_render',
-        'midrocket_chatbot_gpt_settings_api',
-        'midrocket_chatbot_gpt_settings_amazon_api_section'
-    );
-    add_settings_field(
-        'midrocket_chatbot_gpt_amazon_partner_tag',
-        'Partner Tag',
-        'midrocket_chatbot_gpt_amazon_partner_tag_render',
-        'midrocket_chatbot_gpt_settings_api',
-        'midrocket_chatbot_gpt_settings_amazon_api_section'
-    );
     
 
 }
@@ -375,13 +346,6 @@ function midrocket_chatbot_gpt_api_settings_section_callback()
     }
     echo '<div>
             <p>You can obtain your API Key from OpenAI in <a href="https://platform.openai.com/api-keys" target="_blank"><strong>API Keys</strong></a> <a href="https://platform.openai.com/api-keys" target="_blank" style="text-decoration: none"><i class="fi fi-rr-up-right-from-square"></i></a>.</p>
-        </div>';
-}
-
-function midrocket_chatbot_gpt_amazon_api_settings_section_callback()
-{
-    echo '<div>
-            <p>You can obtain your PA API Key from Amazon Affiliates in <a href="https://affiliate-program.amazon.com/assoc_credentials/home" target="_blank"><strong>Credentials</strong></a> <a href="https://affiliate-program.amazon.com/assoc_credentials/home" target="_blank" style="text-decoration: none"><i class="fi fi-rr-up-right-from-square"></i></a>.</p>
         </div>';
 }
 
@@ -665,33 +629,6 @@ function midrocket_chatbot_gpt_model_render()
     <?php
 }
 
-function midrocket_chatbot_gpt_amazon_access_key_render() {
-    $options        = get_option('midrocket_chatbot_gpt_options');
-    ?>
-    <div class="cgpt-flex">
-        <input type='text' name='midrocket_chatbot_gpt_options[amazon_access_key]' value='<?php echo esc_attr($options['amazon_access_key'] ?? ''); ?>'>
-    </div>
-    <?php
-}
-
-function midrocket_chatbot_gpt_amazon_secret_key_render() {
-    $options        = get_option('midrocket_chatbot_gpt_options');
-    ?>
-    <div class="cgpt-flex">
-        <input type='text' name='midrocket_chatbot_gpt_options[amazon_secret_key]' value='<?php echo esc_attr($options['amazon_secret_key'] ?? ''); ?>'>
-    </div>
-    <?php
-}
-
-function midrocket_chatbot_gpt_amazon_partner_tag_render() {
-    $options        = get_option('midrocket_chatbot_gpt_options');
-    ?>
-    <div class="cgpt-flex">
-        <input type='text' name='midrocket_chatbot_gpt_options[amazon_partner_tag]' value='<?php echo esc_attr($options['amazon_partner_tag'] ?? ''); ?>'>
-    </div>
-    <?php
-}
-
 function midrocket_chatbot_gpt_company_name_render()
 {
     $options = get_option('midrocket_chatbot_gpt_options');
@@ -748,15 +685,6 @@ function midrocket_chatbot_gpt_options_validate($input)
     }
     if(isset($input['gpt_model']) && in_array($input['gpt_model'], ['gpt-3.5-turbo', 'gpt-4'])) {
         $current_options['gpt_model'] = $input['gpt_model'];
-    }
-    if(isset($input['amazon_access_key'])) {
-        $current_options['amazon_access_key'] = sanitize_text_field($input['amazon_access_key']);
-    }
-    if(isset($input['amazon_secret_key'])) {
-        $current_options['amazon_secret_key'] = sanitize_text_field($input['amazon_secret_key']);
-    }
-    if(isset($input['amazon_partner_tag'])) {
-        $current_options['amazon_partner_tag'] = sanitize_text_field($input['amazon_partner_tag']);
     }
 
     // Style

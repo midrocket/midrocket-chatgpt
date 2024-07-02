@@ -3,7 +3,7 @@
  * Plugin Name: ChatGPT for Wordpress
  * Plugin URI: https://www.midrocket.com
  * Description: ChatGPT integration for Wordpress.
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Midrocket
  * Author URI: https://www.midrocket.com
  */
@@ -45,15 +45,3 @@ function chatbotgpt_enqueue_admin_style() {
     wp_enqueue_script('chatbotgpt-admin-script', plugins_url('assets/js/admin.js', __FILE__), array('jquery'), null, true);
 }
 add_action('admin_enqueue_scripts', 'chatbotgpt_enqueue_admin_style');
-
-
-// AMAZON
-// Move to external plugin
-require_once plugin_dir_path( __FILE__ ) . 'includes/amazonpa-api.php';
-
-function chatbotgpt_amazon_enqueue_scripts() {
-    // Styles
-    $style = plugins_url( 'assets/css/amazon.css', __FILE__ );
-    wp_enqueue_style( 'chatbot-amazon-style', $style, array(), get_cgpt_plugin_version(), 'all' );
-}
-add_action( 'wp_enqueue_scripts', 'chatbotgpt_amazon_enqueue_scripts' );
